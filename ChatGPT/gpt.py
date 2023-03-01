@@ -31,7 +31,7 @@ response = completion.choices[0].text
 print(response)
 
 # make request to google to get synthesis
-tts = gtts.gTTS(response)
+tts = gtts.gTTS(text=response, lang="fr")
 # save the audio file
 tts.save("hello.mp3")
 # play the audio file

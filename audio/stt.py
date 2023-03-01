@@ -19,7 +19,7 @@ except sr.RequestError as e:
     print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
 # make request to google to get synthesis
-tts = gtts.gTTS(text)
+tts = gtts.gTTS(text=text, lang="fr")
 # save the audio file
 tts.save("hello.mp3")
 # play the audio file
