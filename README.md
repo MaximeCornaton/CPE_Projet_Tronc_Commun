@@ -21,14 +21,30 @@ Responsable logistique : Maxime CORNATON
 ### projet :
 
 ## Mouvement du robot
+Mouvement de type char
+pilotages des cervomoteurs par serializer 3.0
 
 ## Controle distance
+relier les différents modules/carte au Raspberry Pi 3B+
+Interfacage par application (voir ci-après) 
+Pilotage par commande vocal
 
 ## Image
+Détecter les obstacles et les personnes
+Se déplacer en fonction de la distance et reconnaitre son environement
+Cartographier son environement
+Résolution de labyrinthe
+## Application avec flutter
+Mettre en mouvement le robot
+Afficher la caméra
+Afficher la carte
+Afficher les informations du robot
+Serveur web pour l'application
 
-## Application
-
-### Flutter
+## Autre
+Réalisation d'un site web pour le projet
+Réalisation d'un logo pour le projet
+Discussion avec le robot
 
 
 AUBRY Paul, CONCHE Morgan, CORNATON Maxime, NIVEAU Mathis,  REMILLIEUX Maximilien,  ROLLAND Gautier, VALLADON Lucas
