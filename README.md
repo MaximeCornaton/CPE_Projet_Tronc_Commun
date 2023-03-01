@@ -1,5 +1,14 @@
 # CPE_Projet_Tronc_Commun
 
+Créer des branches/dossiers en fonction des parties du projet et incrire ici les descriptions correspondantes.
+
+## Mouvement du robot
+
+## Controle distance
+
+## Image
+
+
 
 AUBRY Paul, CONCHE Morgan, CORNATON Maxime, NIVEAU Mathis,  REMILLIEUX Maximilien,  ROLLAND Gautier, VALLADON Lucas
 
