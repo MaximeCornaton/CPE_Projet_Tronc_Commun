@@ -26,6 +26,9 @@ Responsable logistique : Maxime CORNATON
 
 ## Image
 
+## Application
+
+### Flutter
 
 
 AUBRY Paul, CONCHE Morgan, CORNATON Maxime, NIVEAU Mathis,  REMILLIEUX Maximilien,  ROLLAND Gautier, VALLADON Lucas
