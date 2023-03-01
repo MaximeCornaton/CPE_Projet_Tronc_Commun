@@ -7,9 +7,9 @@ from os import path
 AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "audio.wav")
 
 r = sr.Recognizer()
-with sr.AudioFile(AUDIO_FILE) as source:
-    audio = r.record(source)
-    text =  r.recognize_google(audio, language="fr-FR")
+with sr.Microphone() as source:
+    audio = r.listen(source,timeout=3)
+text =  r.recognize_google(audio, language="fr-FR")
 
 try:
     print("Google Speech Recognition thinks you said " + text)
