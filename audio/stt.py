@@ -6,7 +6,7 @@ from os import path
 AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "audio.wav")
 
 r = sr.Recognizer()
-with sr.Microphone(AUDIO_FILE) as source:
+with sr.AudioFile(AUDIO_FILE) as source:
     audio = r.record(source) 
 
 try:

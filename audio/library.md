@@ -4,3 +4,13 @@ En particulier, on utilise l'API de Google Speech Recognition pour reconnaître 
 ```bash
 pip3 install speech_recognition
 ```
+
+Gtts est une librairie Python permettant de convertir du texte en fichier audio. Elle est compatible avec Python 2.7 et 3.3+.
+```bash
+pip3 install gTTS
+```
+
+Playsound est une librairie Python permettant de jouer un fichier audio. Elle est compatible avec Python 2.7 et 3.3+.
+```bash
+pip3 install playsound
+``` 
