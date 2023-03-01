@@ -8,6 +8,9 @@ Créer des branches/dossiers en fonction des parties du projet et incrire ici le
 
 ## Image
 
+## Application
+
+### Flutter
 
 
 AUBRY Paul, CONCHE Morgan, CORNATON Maxime, NIVEAU Mathis,  REMILLIEUX Maximilien,  ROLLAND Gautier, VALLADON Lucas
