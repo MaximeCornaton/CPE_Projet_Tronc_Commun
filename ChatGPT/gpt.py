@@ -12,8 +12,8 @@ openai.api_key = key
 AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "gpt_audio.wav")
 
 r = sr.Recognizer()
-with sr.AudioFile(AUDIO_FILE) as source:
-    audio = r.record(source)
+with sr.Microphone() as source:
+    audio = r.listen(source,timeout=5)
 
 prompt =  r.recognize_google(audio, language="fr-FR")
 

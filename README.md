@@ -2,33 +2,42 @@
 
 Créer des branches/dossiers en fonction des parties du projet et incrire ici les descriptions correspondantes.
 
-### Composition du groupe :
+## **Composition du groupe :**
 
-animateur projet : Gautier ROLLAND 
-
-Responsable planificateur : Paul AUBRY
-
-Responsable gestionnaire des rendus : Lucas VALLADON
-
-Responsable communication : Maximilien REMILLIEUX 
-
-Responsable "respect des consignes" : Morgan CONCHE
-
-Responsable qualité : Mathis NIVEAU
-
+animateur projet : Gautier ROLLAND  
+Responsable planificateur : Paul AUBRY  
+Responsable gestionnaire des rendus : Lucas VALLADON  
+Responsable communication : Maximilien REMILLIEUX   
+Responsable "respect des consignes" : Morgan CONCHE  
+Responsable qualité : Mathis NIVEAU  
 Responsable logistique : Maxime CORNATON
 
-### projet :
+## **Description du projet :**
+### Mouvement du robot
+Mouvement de type char
+pilotages des cervomoteurs par serializer 3.0
 
-## Mouvement du robot
+### Controle distance
+relier les différents modules/carte au Raspberry Pi 3B+
+Interfacage par application (voir ci-après) 
+Pilotage par commande vocal
 
-## Controle distance
+### Image
+Détecter les obstacles et les personnes
+Se déplacer en fonction de la distance et reconnaitre son environement
+Cartographier son environement
+Résolution de labyrinthe
+### Application avec flutter
+Mettre en mouvement le robot
+Afficher la caméra
+Afficher la carte
+Afficher les informations du robot
+Serveur web pour l'application
 
-## Image
-
-## Application
-
-### Flutter
+### Autre
+Réalisation d'un site web pour le projet
+Réalisation d'un logo pour le projet
+Discussion avec le robot
 
 
 AUBRY Paul, CONCHE Morgan, CORNATON Maxime, NIVEAU Mathis,  REMILLIEUX Maximilien,  ROLLAND Gautier, VALLADON Lucas
