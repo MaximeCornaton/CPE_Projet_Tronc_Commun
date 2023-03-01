@@ -2,6 +2,24 @@
 
 Créer des branches/dossiers en fonction des parties du projet et incrire ici les descriptions correspondantes.
 
+### Composition du groupe :
+
+animateur projet : Gautier ROLLAND 
+
+Responsable planificateur : Paul AUBRY
+
+Responsable gestionnaire des rendus : Lucas VALLADON
+
+Responsable communication : Maximilien REMILLIEUX 
+
+Responsable "respect des consignes" : Morgan CONCHE
+
+Responsable qualité : Mathis NIVEAU
+
+Responsable logistique : Maxime CORNATON
+
+### projet :
+
 ## Mouvement du robot
 
 ## Controle distance
