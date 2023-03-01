@@ -21,6 +21,7 @@ def detectAndDisplay(frame):
 cap = cv2.VideoCapture(0) # Ouverture de la webcam
 while True:
     valeurRetour, imageWebcam = cap.read() # Lecture de l'image de la webcam
+    cv2.flip(imageWebcam, 1, imageWebcam) # Miroir de l'image
     detectAndDisplay(imageWebcam)
     if cv2.waitKey(1) & 0xFF == ord('q'): # Touche 'q' pour quitter  
         break
