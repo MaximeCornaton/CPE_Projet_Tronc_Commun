@@ -1,25 +1,18 @@
-from transformers import pipeline
-from flask import Flask, request, jsonify
+import openai
+from clef_token import key
 
-# Chargez le modèle ChatGPT pré-entraîné
-generator = pipeline('text-generation', model='EleutherAI/gpt-neo-2.7B')
+# Load your API key from an environment variable
+openai.api_key = key
 
-# Créez une fonction qui utilise le modèle pour générer une réponse
-def generate_response(input_text):
-    response = generator(input_text, max_length=50)[0]['generated_text']
-    return response.strip()
+# Generate a response
+completion = openai.Completion.create(
+    engine="text-davinci-003",
+    prompt="Comment vas-tu ?",
+    max_tokens=50,
+    n=1,
+    stop=None,
+    temperature=0.5,
+)
 
-# Initialisez Flask
-app = Flask(__name__)
-
-# Définissez une route pour la requête HTTP POST
-@app.route('/chat', methods=['POST'])
-def chat():
-    data = request.get_json()
-    input_text = data['input_text']
-    response = generate_response(input_text)
-    return jsonify({'response': response})
-
-# Lancez l'application Flask
-if __name__ == '__main__':
-    app.run(debug=True)
+response = completion.choices[0].text
+print(response)
