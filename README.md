@@ -27,6 +27,7 @@ Détecter les obstacles et les personnes
 Se déplacer en fonction de la distance et reconnaitre son environement
 Cartographier son environement
 Résolution de labyrinthe
+
 ### Application avec flutter
 Mettre en mouvement le robot
 Afficher la caméra
