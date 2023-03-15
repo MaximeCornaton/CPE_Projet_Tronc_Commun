@@ -1,0 +1,12 @@
+.arrow {
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.up {
+  border-width: 0 15px 20px 15px;
+  border-color: var(--bs-border-color-translucent) var(--bs-border-color-translucent) #000 var(--bs-border-color-translucent);
+  margin-bottom: 20px;
+}
+
