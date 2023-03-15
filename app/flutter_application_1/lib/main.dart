@@ -15,7 +15,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.black, // Couleur de la barre supérieure
         appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.black, // Couleur de fond de la barre supérieure
+          backgroundColor:
+              Colors.black, // Couleur de fond de la barre supérieure
         ),
         scaffoldBackgroundColor: Colors.grey[900], // Couleur de fond de la page
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -23,7 +24,6 @@ class MyApp extends StatelessWidget {
               255, 185, 117, 197), // La couleur de l'élément sélectionné
           unselectedItemColor:
               Colors.white, // La couleur des éléments non sélectionnés
-          
         ),
       ),
       home: const MyStatefulWidget(),
@@ -99,35 +99,30 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             icon: Icon(Icons.home_filled),
             label: 'Home',
             backgroundColor:
-              Colors.black, // La couleur de fond de la barre de navigation
+                Colors.black, // La couleur de fond de la barre de navigation
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings_remote_rounded),
             label: 'Control',
-            backgroundColor:
-              Colors.black,
+            backgroundColor: Colors.black,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.map),
             label: 'Map',
-            backgroundColor:
-              Colors.black,
+            backgroundColor: Colors.black,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Settings',
-            backgroundColor:
-              Colors.black,
+            backgroundColor: Colors.black,
           ),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        
       ),
     );
   }
 }
-
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -162,7 +157,6 @@ class ControlPage extends StatelessWidget {
   }
 }
 
-
 class ArrowPadExample extends StatefulWidget {
   const ArrowPadExample({Key? key}) : super(key: key);
 
@@ -171,8 +165,7 @@ class ArrowPadExample extends StatefulWidget {
 }
 
 class _ArrowPadExampleState extends State<ArrowPadExample> {
-  String _secondArrowPadValue = 'With Functions (tapDown)';
-  String _thirdArrowPadValue = 'With Functions (tapUp)';
+  String ArrowPadValue = 'With Functions (tapUp)';
 
   @override
   Widget build(BuildContext context) {
@@ -180,9 +173,6 @@ class _ArrowPadExampleState extends State<ArrowPadExample> {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Arrow Pad Example'),
-      ),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -191,109 +181,51 @@ class _ArrowPadExampleState extends State<ArrowPadExample> {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
-                  ArrowPad(),
-                  Text('Default Arrow Pad'),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ArrowPad(
                     padding: const EdgeInsets.all(8.0),
                     height: height / 5,
                     width: width / 4,
-                    iconColor: Colors.white,
-                    innerColor: Colors.red,
-                    outerColor: const Color(0xFFCC0000),
-                    splashColor: const Color(0xFFCC0000),
-                    hoverColor: const Color(0xFFFF4D4D),
-                    onPressedUp: () {
-                      setState(() {
-                        _secondArrowPadValue = 'Up Pressed (tapDown)';
-                      });
-                    },
-                    onPressedDown: () {
-                      setState(() {
-                        _secondArrowPadValue = 'Down Pressed (tapDown)';
-                      });
-                    },
-                    onPressedLeft: () {
-                      setState(() {
-                        _secondArrowPadValue = 'Left Pressed (tapDown)';
-                      });
-                    },
-                    onPressedRight: () {
-                      setState(() {
-                        _secondArrowPadValue = 'Right Pressed (tapDown)';
-                      });
-                    },
-                  ),
-                  Text(_secondArrowPadValue),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ArrowPad(
-                    padding: const EdgeInsets.all(8.0),
-                    height: height / 5,
-                    width: width / 4,
-                    iconColor: Colors.white,
-                    innerColor: Colors.red,
-                    outerColor: const Color(0xFFCC0000),
-                    splashColor: const Color(0xFFCC0000),
-                    hoverColor: const Color(0xFFFF4D4D),
+                    iconColor: Colors.white, // couleur des icones
+                    innerColor: const Color.fromARGB(
+                        255, 22, 21, 21), // couleur du cercle interieur
+                    outerColor: const Color.fromARGB(
+                        255, 0, 0, 0), // couleur du cercle exterieur
+                    splashColor: const Color.fromARGB(
+                        255, 185, 117, 197), // couleur du splash
+                    hoverColor:
+                        Color.fromARGB(255, 42, 42, 42), // couleur du hover
                     clickTrigger: ClickTrigger.onTapUp,
                     onPressedUp: () {
                       setState(() {
-                        _thirdArrowPadValue = 'Up Pressed (tapUp)';
+                        ArrowPadValue = 'Up Pressed (tapUp)';
                       });
                     },
                     onPressedDown: () {
                       setState(() {
-                        _thirdArrowPadValue = 'Down Pressed (tapUp)';
+                        ArrowPadValue = 'Down Pressed (tapUp)';
                       });
                     },
                     onPressedLeft: () {
                       setState(() {
-                        _thirdArrowPadValue = 'Left Pressed (tapUp)';
+                        ArrowPadValue = 'Left Pressed (tapUp)';
                       });
                     },
                     onPressedRight: () {
                       setState(() {
-                        _thirdArrowPadValue = 'Right Pressed (tapUp)';
+                        ArrowPadValue = 'Right Pressed (tapUp)';
                       });
                     },
                   ),
-                  Text(_thirdArrowPadValue),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ArrowPad(
-                    padding: const EdgeInsets.all(8.0),
-                    height: height / 5,
-                    width: width / 4,
-                    arrowPadIconStyle: ArrowPadIconStyle.arrow,
-                    hoverColor: Colors.green,
-                    iconColor: const Color(0xFF631739),
-                    outerColor: const Color(0xFF86FC8A),
+                  Text(
+                    ArrowPadValue,
+                    style: const TextStyle(fontSize: 24, color: Colors.white),
                   ),
-                  const Text('Without Functions'),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ArrowPad(
-                    height: height / 7,
-                    width: width / 6,
-                    innerColor: Colors.blue,
-                    arrowPadIconStyle: ArrowPadIconStyle.arrow,
-                  ),
-                  const Text('Small Size'),
                 ],
               ),
             ],
