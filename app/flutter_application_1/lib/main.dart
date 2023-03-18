@@ -17,21 +17,23 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return AdaptiveTheme(
       light: ThemeData(
+        fontFamily: 'Ubuntu',
         brightness: Brightness.light,
-        primarySwatch: Colors.purple,
+        primarySwatch: Colors.orange,
         //hintColor: Colors.amber,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          selectedItemColor: Colors.purple,
+          selectedItemColor: Colors.orange,
           unselectedItemColor: Colors.black,
           backgroundColor: Colors.white,
         ),
       ),
       dark: ThemeData(
+        fontFamily: 'Ubuntu',
         brightness: Brightness.dark,
-        primarySwatch: Colors.purple,
+        primarySwatch: Colors.orange,
         //hintColor: Colors.amber,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          selectedItemColor: Colors.purple,
+          selectedItemColor: Colors.orange,
           unselectedItemColor: Colors.white,
           backgroundColor: Colors.black,
         ),
@@ -69,6 +71,14 @@ class MyStatefulWidget extends StatefulWidget {
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
 
+  static const List<Widget> _pages = <Widget>[
+    HomePage(),
+    ControlPage(),
+    MapPage(),
+    QuestionsPage(),
+    SettingsPage(),
+  ];
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -78,68 +88,35 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: [
-          Navigator(
-            initialRoute: '/',
-            onGenerateRoute: (settings) {
-              return MaterialPageRoute(
-                builder: (context) => const HomePage(),
-              );
-            },
-          ),
-          Navigator(
-            initialRoute: '/',
-            onGenerateRoute: (settings) {
-              return MaterialPageRoute(
-                builder: (context) => const ControlPage(),
-              );
-            },
-          ),
-          Navigator(
-            initialRoute: '/',
-            onGenerateRoute: (settings) {
-              return MaterialPageRoute(
-                builder: (context) => const MapPage(),
-              );
-            },
-          ),
-          Navigator(
-            initialRoute: '/',
-            onGenerateRoute: (settings) {
-              return MaterialPageRoute(
-                builder: (context) => const SettingsPage(),
-              );
-            },
-          ),
-        ],
+      body: Navigator(
+        onGenerateRoute: (RouteSettings settings) {
+          return MaterialPageRoute(
+            builder: (_) => _pages[_selectedIndex],
+            settings: settings,
+          );
+        },
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: const Icon(Icons.home_filled),
-            label: 'Home',
-            backgroundColor:
-                Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+            icon: Icon(Icons.home_filled),
+            label: '•',
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.settings_remote_rounded),
-            label: 'Contrôle',
-            backgroundColor:
-                Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+            icon: Icon(Icons.control_camera),
+            label: '•',
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.map),
-            label: 'Carte',
-            backgroundColor:
-                Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+            icon: Icon(Icons.threed_rotation),
+            label: '•',
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.settings),
-            label: 'Paramètres',
-            backgroundColor:
-                Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+            icon: Icon(Icons.question_answer),
+            label: '•',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: '•',
           ),
         ],
         currentIndex: _selectedIndex,
@@ -178,13 +155,21 @@ class ControlPage extends StatefulWidget {
 class ControlPageState extends State<ControlPage> {
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        Expanded(child: ArrowPadExample()),
-        Expanded(child: InputUserCreateAlbum()),
-        Text('Controle'),
-      ],
-    );
+    return const ArrowPadExample();
+  }
+}
+
+class QuestionsPage extends StatefulWidget {
+  const QuestionsPage({Key? key}) : super(key: key);
+
+  @override
+  QuestionsPageState createState() => QuestionsPageState();
+}
+
+class QuestionsPageState extends State<QuestionsPage> {
+  @override
+  Widget build(BuildContext context) {
+    return const InputUserCreateAlbum();
   }
 }
 
@@ -203,13 +188,16 @@ class InputUserCreateAlbumState extends State<InputUserCreateAlbum> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(8.0),
         child: (_futureAlbum == null) ? buildColumn() : buildFutureBuilder(),
       ),
     );
   }
 
-  Row buildColumn() {
-    return Row(
+  Column buildColumn() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         TextField(
           controller: _controller,
@@ -271,7 +259,9 @@ class ArrowPadExampleState extends State<ArrowPadExample> {
                 iconColor: Colors.white,
                 innerColor: const Color.fromARGB(255, 22, 21, 21),
                 outerColor: const Color.fromARGB(255, 0, 0, 0),
-                splashColor: const Color.fromARGB(255, 216, 142, 230),
+                splashColor: Theme.of(context)
+                    .bottomNavigationBarTheme
+                    .selectedItemColor,
                 hoverColor: const Color.fromARGB(255, 42, 42, 42),
                 clickTrigger: ClickTrigger.onTapUp,
                 onPressedUp: () {
@@ -361,13 +351,17 @@ class SettingsPage extends StatelessWidget {
             onPressed: () {
               AdaptiveTheme.of(context).toggleThemeMode();
             },
-            child: const Text('Changer le thème'),
+            child: const Text(
+              'Changer le thème',
+            ),
           ),
           ElevatedButton(
             onPressed: () {
               AdaptiveTheme.of(context).setSystem();
             },
-            child: const Text("Utiliser le thème de l'appareil"),
+            child: const Text(
+              "Utiliser le thème de l'appareil",
+            ),
           ),
         ],
       ),
