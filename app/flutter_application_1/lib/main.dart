@@ -75,7 +75,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     HomePage(),
     ControlPage(),
     MapPage(),
-    QuestionsPage(),
+    ChatPage(),
     SettingsPage(),
   ];
 
@@ -145,6 +145,132 @@ class HomePage extends StatelessWidget {
   }
 }
 
+class ChatPage extends StatefulWidget {
+  const ChatPage({Key? key}) : super(key: key);
+
+  @override
+  _ChatPageState createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
+  final TextEditingController _textController = TextEditingController();
+  final List<Map<String, String>> _messages = [];
+
+  bool _isHovered = false;
+
+  Widget _buildTextComposer() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Row(
+        children: <Widget>[
+          Flexible(
+            child: TextField(
+              controller: _textController,
+              decoration: const InputDecoration(hintText: 'Entrez un message'),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: InkWell(
+              onHover: (value) {
+                setState(() {
+                  _isHovered = value;
+                });
+              },
+              onTap: () async {
+                final message = _textController.text;
+                final response = await sendMessage(message);
+                setState(() {
+                  _messages.add({'message': message, 'response': response});
+                });
+                _textController.clear();
+              },
+              child: Icon(
+                Icons.send,
+                color: _isHovered
+                    ? Theme.of(context)
+                        .bottomNavigationBarTheme
+                        .selectedItemColor
+                    : null,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Column(
+      children: <Widget>[
+        Expanded(
+          child: ListView.builder(
+            padding: const EdgeInsets.all(8.0),
+            itemCount: _messages.length,
+            itemBuilder: (BuildContext context, int index) {
+              final message = _messages[index];
+              return Container(
+                margin: const EdgeInsets.symmetric(vertical: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.all(10),
+                      child: Text(
+                        message['message']!,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.all(10),
+                      child: Text(
+                        message['response']!,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+        const Divider(height: 1.0),
+        Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+          ),
+          child: Column(
+            children: <Widget>[
+              _buildTextComposer(),
+              const Divider(height: 1.0),
+            ],
+          ),
+        ),
+      ],
+    ));
+  }
+
+  Future<String> sendMessage(String message) async {
+// logique pour envoyer le message
+    await Future.delayed(const Duration(seconds: 2));
+    return "Réponse au message : $message";
+  }
+}
+
 class ControlPage extends StatefulWidget {
   const ControlPage({Key? key}) : super(key: key);
 
@@ -156,78 +282,6 @@ class ControlPageState extends State<ControlPage> {
   @override
   Widget build(BuildContext context) {
     return const ArrowPadExample();
-  }
-}
-
-class QuestionsPage extends StatefulWidget {
-  const QuestionsPage({Key? key}) : super(key: key);
-
-  @override
-  QuestionsPageState createState() => QuestionsPageState();
-}
-
-class QuestionsPageState extends State<QuestionsPage> {
-  @override
-  Widget build(BuildContext context) {
-    return const InputUserCreateAlbum();
-  }
-}
-
-class InputUserCreateAlbum extends StatefulWidget {
-  const InputUserCreateAlbum({super.key});
-
-  @override
-  InputUserCreateAlbumState createState() => InputUserCreateAlbumState();
-}
-
-class InputUserCreateAlbumState extends State<InputUserCreateAlbum> {
-  final TextEditingController _controller = TextEditingController();
-  Future<Album>? _futureAlbum;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(8.0),
-        child: (_futureAlbum == null) ? buildColumn() : buildFutureBuilder(),
-      ),
-    );
-  }
-
-  Column buildColumn() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        TextField(
-          controller: _controller,
-          decoration: const InputDecoration(hintText: 'Enter Title'),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            setState(() {
-              _futureAlbum = createAlbum(_controller.text);
-            });
-          },
-          child: const Text('Create Data'),
-        ),
-      ],
-    );
-  }
-
-  FutureBuilder<Album> buildFutureBuilder() {
-    return FutureBuilder<Album>(
-      future: _futureAlbum,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Text(snapshot.data!.title);
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        }
-
-        return const CircularProgressIndicator();
-      },
-    );
   }
 }
 
