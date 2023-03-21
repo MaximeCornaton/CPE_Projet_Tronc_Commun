@@ -211,39 +211,9 @@ class _ChatPageState extends State<ChatPage> {
             itemCount: _messages.length,
             itemBuilder: (BuildContext context, int index) {
               final message = _messages[index];
-              return Container(
-                margin: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      padding: const EdgeInsets.all(10),
-                      child: Text(
-                        message['message']!,
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      padding: const EdgeInsets.all(10),
-                      child: Text(
-                        message['response']!,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              return ChatMessage(
+                message: message['message']!,
+                response: message['response']!,
               );
             },
           ),
@@ -268,6 +238,50 @@ class _ChatPageState extends State<ChatPage> {
 // logique pour envoyer le message
     await Future.delayed(const Duration(seconds: 2));
     return "Réponse au message : $message";
+  }
+}
+
+class ChatMessage extends StatelessWidget {
+  final String message;
+  final String response;
+
+  const ChatMessage({required this.message, required this.response});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: const EdgeInsets.all(10),
+            child: Text(
+              message,
+              style: const TextStyle(fontSize: 16, color: Colors.black),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: const EdgeInsets.all(10),
+            child: Text(
+              response,
+              style: const TextStyle(
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
