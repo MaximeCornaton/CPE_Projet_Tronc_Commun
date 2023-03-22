@@ -22,10 +22,12 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Ubuntu',
         brightness: Brightness.light,
         primarySwatch: Colors.orange,
+        primaryColor: Colors.grey[200],
+
         //hintColor: Colors.amber,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           selectedItemColor: Colors.orange,
-          unselectedItemColor: Colors.black,
+          unselectedItemColor: Colors.grey,
           backgroundColor: Colors.white,
         ),
       ),
@@ -33,6 +35,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Ubuntu',
         brightness: Brightness.dark,
         primarySwatch: Colors.orange,
+        primaryColor: Colors.grey[900],
         //hintColor: Colors.amber,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           selectedItemColor: Colors.orange,

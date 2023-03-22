@@ -51,7 +51,9 @@ class ChatPageState extends State<ChatPage> {
                     ? Theme.of(context)
                         .bottomNavigationBarTheme
                         .selectedItemColor
-                    : null,
+                    : Theme.of(context)
+                        .bottomNavigationBarTheme
+                        .unselectedItemColor,
               ),
             ),
           ),
@@ -68,7 +70,9 @@ class ChatPageState extends State<ChatPage> {
                       ? Theme.of(context)
                           .bottomNavigationBarTheme
                           .selectedItemColor
-                      : null),
+                      : Theme.of(context)
+                          .bottomNavigationBarTheme
+                          .unselectedItemColor),
             ),
           ),
         ],

@@ -23,6 +23,8 @@ class SettingsPageState extends State<SettingsPage> {
         children: [
           SwitchWidget(
             text: 'Changer le thème',
+            color_on: Theme.of(context).primaryColor,
+            color_switch: Theme.of(context).primaryColor,
             onPressed: () {
               AdaptiveTheme.of(context).toggleThemeMode();
             },
