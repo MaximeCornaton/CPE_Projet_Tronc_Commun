@@ -1,11 +1,7 @@
-import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:arrow_pad/arrow_pad.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 
-import 'package:http/http.dart' as http;
 
 
 class SettingsPage extends StatefulWidget {
