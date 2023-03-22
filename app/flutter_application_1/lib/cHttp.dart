@@ -21,7 +21,7 @@ class Album {
 }
 
 Future<Album> fetchAlbum() async {
-  final response = await http.get(Uri.parse('c:3000/data'));
+  final response = await http.get(Uri.parse('http://172.20.10.2:3000/data'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,

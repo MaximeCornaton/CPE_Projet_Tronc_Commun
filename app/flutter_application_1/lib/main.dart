@@ -8,7 +8,6 @@ import 'pControl.dart';
 import 'pChat.dart';
 import 'pMap.dart';
 
-
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
