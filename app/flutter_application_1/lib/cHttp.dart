@@ -22,7 +22,7 @@ class Album {
 
 Future<Album> fetchAlbum() async {
   final response = await http
-      .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/2'));
+      .get(Uri.parse('http://172.20.10.2:3000/data'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -37,7 +37,7 @@ Future<Album> fetchAlbum() async {
 
 Future<Album> createAlbum(String title) async {
   final response = await http.post(
-    Uri.parse('https://jsonplaceholder.typicode.com/albums'),
+    Uri.parse('http://172.20.10.2:3000/data'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
