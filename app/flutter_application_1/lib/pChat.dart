@@ -3,7 +3,6 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 
 import 'cHttp.dart';
 
-
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
 
@@ -14,7 +13,7 @@ class ChatPage extends StatefulWidget {
 class ChatPageState extends State<ChatPage> {
   final TextEditingController _textController = TextEditingController();
   final List<Map<String, String>> _messages = [];
-  Future<Album>? _futureAlbum;
+  //Future<Album>? _futureAlbum;
 
   bool _isHovered = false;
   bool _showAnswers = true;
@@ -67,8 +66,8 @@ class ChatPageState extends State<ChatPage> {
               child: Icon(Icons.visibility,
                   color: _showAnswers
                       ? Theme.of(context)
-                        .bottomNavigationBarTheme
-                        .selectedItemColor
+                          .bottomNavigationBarTheme
+                          .selectedItemColor
                       : null),
             ),
           ),
@@ -120,15 +119,15 @@ class ChatPageState extends State<ChatPage> {
 
   Future<String> sendMessage(String message) async {
     // logique pour envoyer le message
-   _futureAlbum = createAlbum(message);
-    
+    //_futureAlbum = createAlbum(message);
+
+    //_futureAlbum = await createAlbum(message);
+    //await createAlbum(message);
+
+    await Future.delayed(const Duration(seconds: 1));
     return message;
   }
-
-  
 }
-
-
 
 class ChatMessage extends StatefulWidget {
   final String message;
@@ -136,7 +135,7 @@ class ChatMessage extends StatefulWidget {
   final bool showResponses;
 
   const ChatMessage({
-    Key ?key, 
+    Key? key,
     required this.message,
     required this.response,
     required this.showResponses,
@@ -156,10 +155,11 @@ class ChatMessageState extends State<ChatMessage> {
           decoration: BoxDecoration(
             color: Colors.grey[300],
             borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(5.0),
-                topRight: Radius.circular(5.0),
-                bottomLeft: Radius.zero,
-                bottomRight: Radius.circular(5.0),),
+              topLeft: Radius.circular(5.0),
+              topRight: Radius.circular(5.0),
+              bottomLeft: Radius.zero,
+              bottomRight: Radius.circular(5.0),
+            ),
           ),
           padding: const EdgeInsets.all(10),
           margin: const EdgeInsets.only(top: 10.0),
@@ -168,7 +168,8 @@ class ChatMessageState extends State<ChatMessage> {
             style: const TextStyle(fontSize: 16, color: Colors.black),
           ),
         ),
-        if (widget.showResponses) // afficher le message de réponse si showResponses est true
+        if (widget
+            .showResponses) // afficher le message de réponse si showResponses est true
           Container(
             decoration: const BoxDecoration(
               color: Colors.black,
@@ -176,9 +177,9 @@ class ChatMessageState extends State<ChatMessage> {
                 topLeft: Radius.zero,
                 topRight: Radius.circular(5.0),
                 bottomLeft: Radius.circular(5.0),
-                bottomRight: Radius.circular(5.0),),
+                bottomRight: Radius.circular(5.0),
+              ),
             ),
-            
             padding: const EdgeInsets.all(10),
             child: Text(
               widget.response,
