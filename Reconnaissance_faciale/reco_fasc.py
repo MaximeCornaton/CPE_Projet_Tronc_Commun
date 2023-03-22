@@ -15,7 +15,7 @@ def detectAndDisplay(frame):
         for (x2,y2,w2,h2) in eyes: 
             eye_center = (x + x2 + w2//2, y + y2 + h2//2) # Centre du cercle
             radius = int(round((w2 + h2)*0.25)) # Rayon du cercle
-            frame = cv2.circle(frame, eye_center, radiusY, (255, 0, 0 ), 4) # Dessin du cercle   
+            frame = cv2.circle(frame, eye_center, radius, (255, 0, 0 ), 4) # Dessin du cercle   
     cv2.imshow('Capture - Face detection', frame) # Affichage de l'image de la webcam
 
 cap = cv2.VideoCapture(0) # Ouverture de la webcam
