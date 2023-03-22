@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 class SwitchWidget extends StatefulWidget {
   final String? text;
   final Function? onPressed;
-  final IconData? icon;
+  final IconData? icon1;
+  final IconData? icon2;
   final Color? color_on;
   final Color? color_switch;
 
   const SwitchWidget(
       {Key? key,
       this.text = 'Default Switch',
-      this.icon,
+      this.icon1,
+      this.icon2,
       this.onPressed,
       this.color_switch,
       this.color_on})
@@ -56,14 +58,26 @@ class _SwitchWidgetState extends State<SwitchWidget> {
                         child: Stack(
                           alignment: const AlignmentDirectional(0, 0),
                           children: [
-                            const Align(
-                              alignment: AlignmentDirectional(0.95, 0),
+                            Align(
+                              alignment: const AlignmentDirectional(0.95, 0),
                               child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 8, 0),
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    0, 0, 8, 0),
                                 child: Icon(
-                                  Icons.nights_stay,
-                                  color: Color(0xFF95A1AC),
+                                  widget.icon1,
+                                  color: const Color(0xFF95A1AC),
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                            Align(
+                              alignment: const AlignmentDirectional(-0.55, 0),
+                              child: Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    0, 0, 8, 0),
+                                child: Icon(
+                                  widget.icon2,
+                                  color: const Color(0xFF95A1AC),
                                   size: 20,
                                 ),
                               ),

@@ -39,20 +39,20 @@ class _ButtonWidgetState extends State<ButtonWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(widget.text ?? 'Default Switch'),
-                      const SizedBox(
+                      SizedBox(
                         width: 80,
                         height: 40,
                         child: Stack(
-                          alignment: AlignmentDirectional(0, 0),
+                          alignment: const AlignmentDirectional(0, 0),
                           children: [
                             Align(
-                              alignment: AlignmentDirectional(0.30, 0),
+                              alignment: const AlignmentDirectional(0.30, 0),
                               child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 8, 0),
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    0, 0, 8, 0),
                                 child: Icon(
-                                  Icons.nights_stay,
-                                  color: Color(0xFF95A1AC),
+                                  widget.icon ?? Icons.nights_stay,
+                                  color: const Color(0xFF95A1AC),
                                   size: 20,
                                 ),
                               ),

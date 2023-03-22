@@ -4,7 +4,9 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'cHttp.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({Key? key}) : super(key: key);
+  final bool showAnswers;
+
+  const ChatPage({Key? key, this.showAnswers = false}) : super(key: key);
 
   @override
   ChatPageState createState() => ChatPageState();
@@ -16,7 +18,13 @@ class ChatPageState extends State<ChatPage> {
   //Future<Album>? _futureAlbum;
 
   bool _isHovered = false;
-  bool _showAnswers = true;
+  late bool _showAnswers;
+
+  @override
+  void initState() {
+    super.initState();
+    _showAnswers = widget.showAnswers;
+  }
 
   Widget _buildTextComposer() {
     return Container(
@@ -26,7 +34,8 @@ class ChatPageState extends State<ChatPage> {
           Flexible(
             child: TextField(
               controller: _textController,
-              decoration: const InputDecoration(hintText: 'Entrez un message'),
+              decoration: const InputDecoration(
+                  hintText: 'Entrez un message', border: InputBorder.none),
             ),
           ),
           Container(
@@ -65,7 +74,10 @@ class ChatPageState extends State<ChatPage> {
                   _showAnswers = !_showAnswers;
                 });
               },
-              child: Icon(Icons.visibility,
+              child: Icon(
+                  _showAnswers
+                      ? Icons.visibility_rounded
+                      : Icons.visibility_off_rounded,
                   color: _showAnswers
                       ? Theme.of(context)
                           .bottomNavigationBarTheme

@@ -28,12 +28,15 @@ class SettingsPageState extends State<SettingsPage> {
             onPressed: () {
               AdaptiveTheme.of(context).toggleThemeMode();
             },
+            icon1: Icons.dark_mode_rounded,
+            icon2: Icons.light_mode_rounded,
           ),
           ButtonWidget(
             text: 'Utiliser le thème système',
             onPressed: () {
               AdaptiveTheme.of(context).setSystem();
             },
+            icon: Icons.dark_mode_rounded,
           ),
         ],
       ),
