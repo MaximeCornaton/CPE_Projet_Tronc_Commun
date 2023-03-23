@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'cHttp.dart';
+import 'pPage.dart';
 
-class MapPage extends StatefulWidget {
-  const MapPage({Key? key}) : super(key: key);
+class MapPage extends BasePage {
+  MapPage({Key? key}) : super(title: 'Carte');
 
   @override
   State<MapPage> createState() => _MapPageState();

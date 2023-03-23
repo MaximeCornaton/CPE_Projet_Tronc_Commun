@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 
 import 'cHttp.dart';
+import 'pPage.dart';
 
-class ChatPage extends StatefulWidget {
+class ChatPage extends BasePage {
   final bool showAnswers;
 
-  const ChatPage({Key? key, this.showAnswers = false}) : super(key: key);
+  ChatPage({this.showAnswers = false, super.key}) : super(title: 'Paramètres');
 
   @override
   ChatPageState createState() => ChatPageState();
@@ -28,7 +29,7 @@ class ChatPageState extends State<ChatPage> {
 
   Widget _buildTextComposer() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+      margin: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Row(
         children: <Widget>[
           Flexible(
@@ -39,7 +40,7 @@ class ChatPageState extends State<ChatPage> {
             ),
           ),
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 4.0),
+            margin: const EdgeInsets.symmetric(horizontal: 10.0),
             child: InkWell(
               onHover: (value) {
                 setState(() {
@@ -56,6 +57,7 @@ class ChatPageState extends State<ChatPage> {
               },
               child: Icon(
                 Icons.send,
+                size: 20,
                 color: _isHovered
                     ? Theme.of(context)
                         .bottomNavigationBarTheme
@@ -67,7 +69,7 @@ class ChatPageState extends State<ChatPage> {
             ),
           ),
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 4.0),
+            margin: const EdgeInsets.symmetric(horizontal: 10.0),
             child: InkWell(
               onTap: () {
                 setState(() {
@@ -75,6 +77,7 @@ class ChatPageState extends State<ChatPage> {
                 });
               },
               child: Icon(
+                  size: 20,
                   _showAnswers
                       ? Icons.visibility_rounded
                       : Icons.visibility_off_rounded,
@@ -135,13 +138,9 @@ class ChatPageState extends State<ChatPage> {
 
   Future<String> sendMessage(String message) async {
     // logique pour envoyer le message
-    //_futureAlbum = createAlbum(message);
-
-    //_futureAlbum = await createAlbum(message);
-    //await createAlbum(message);
-
-    await Future.delayed(const Duration(seconds: 1));
-    return message;
+    Album album = await createAlbum(message);
+    String response = album.title;
+    return response;
   }
 }
 

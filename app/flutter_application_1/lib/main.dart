@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 
@@ -43,9 +42,8 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.black,
         ),
         appBarTheme: const AppBarTheme(
-          backgroundColor:
-              Colors.black, // Couleur de fond de la barre supérieure
-        ),
+            // Couleur de fond de la barre supérieure
+            ),
       ),
       initial: MediaQuery.of(context).platformBrightness == Brightness.light
           ? AdaptiveThemeMode.light
@@ -56,10 +54,10 @@ class MyApp extends StatelessWidget {
         darkTheme: darkTheme,
         home: const MyStatefulWidget(),
         routes: {
-          '/home': (context) => const HomePage(),
-          '/control': (context) => const ControlPage(),
-          '/map': (context) => const MapPage(),
-          '/settings': (context) => const SettingsPage(),
+          '/home': (context) => HomePage(),
+          '/control': (context) => ControlPage(),
+          '/map': (context) => MapPage(),
+          '/settings': (context) => SettingsPage(),
         },
       ),
     );
@@ -76,12 +74,20 @@ class MyStatefulWidget extends StatefulWidget {
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _pages = <Widget>[
+  static final List<Widget> _pages = <Widget>[
     HomePage(),
     ControlPage(),
     MapPage(),
     ChatPage(),
     SettingsPage(),
+  ];
+
+  final List<String> _pageTitles = [
+    'Accueil',
+    'Contrôle',
+    'Carte',
+    'Chat',
+    'Paramètres'
   ];
 
   void _onItemTapped(int index) {
@@ -93,6 +99,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(_pageTitles[_selectedIndex]),
+      ),
       body: Navigator(
         onGenerateRoute: (RouteSettings settings) {
           return MaterialPageRoute(

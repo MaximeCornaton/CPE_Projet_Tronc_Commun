@@ -1,89 +1,102 @@
-
 import 'package:flutter/material.dart';
-import 'package:arrow_pad/arrow_pad.dart';
+import 'package:flutter_application_1/pPage.dart';
 
-
-
-class ControlPage extends StatefulWidget {
-  const ControlPage({Key? key}) : super(key: key);
+class ControlPage extends BasePage {
+  ControlPage() : super(title: 'Contrôle');
 
   @override
-  ControlPageState createState() => ControlPageState();
+  _ControlPageState createState() => _ControlPageState();
 }
 
-class ControlPageState extends State<ControlPage> {
-  @override
-  Widget build(BuildContext context) {
-    return const ArrowPadExample();
+class _ControlPageState extends State<ControlPage> {
+  bool _isMovingForward = false;
+  bool _isMovingBackward = false;
+  bool _isTurningLeft = false;
+  bool _isTurningRight = false;
+
+  void _moveForward(bool value) {
+    setState(() {
+      _isMovingForward = value;
+    });
   }
-}
 
-class ArrowPadExample extends StatefulWidget {
-  const ArrowPadExample({Key? key}) : super(key: key);
+  void _moveBackward(bool value) {
+    setState(() {
+      _isMovingBackward = value;
+    });
+  }
 
-  @override
-  ArrowPadExampleState createState() => ArrowPadExampleState();
-}
+  void _turnLeft(bool value) {
+    setState(() {
+      _isTurningLeft = value;
+    });
+  }
 
-class ArrowPadExampleState extends State<ArrowPadExample> {
-  String arrowPadValue = 'With Functions (tapUp)';
+  void _turnRight(bool value) {
+    setState(() {
+      _isTurningRight = value;
+    });
+  }
+
+  void _stop() {
+    setState(() {
+      _isMovingForward = false;
+      _isMovingBackward = false;
+      _isTurningLeft = false;
+      _isTurningRight = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-
     return Scaffold(
-      body: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ArrowPad(
-                padding: const EdgeInsets.all(8.0),
-                height: height / 5,
-                width: width / 4,
-                iconColor: Colors.white,
-                innerColor: const Color.fromARGB(255, 22, 21, 21),
-                outerColor: const Color.fromARGB(255, 0, 0, 0),
-                splashColor: Theme.of(context)
-                    .bottomNavigationBarTheme
-                    .selectedItemColor,
-                hoverColor: const Color.fromARGB(255, 42, 42, 42),
-                clickTrigger: ClickTrigger.onTapUp,
-                onPressedUp: () {
-                  setState(() {
-                    arrowPadValue = 'Up Pressed (tapUp)';
-                  });
-                },
-                onPressedDown: () {
-                  setState(() {
-                    arrowPadValue = 'Down Pressed (tapUp)';
-                  });
-                },
-                onPressedLeft: () {
-                  setState(() {
-                    arrowPadValue = 'Left Pressed (tapUp)';
-                  });
-                },
-                onPressedRight: () {
-                  setState(() {
-                    arrowPadValue = 'Right Pressed (tapUp)';
-                  });
-                },
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                arrowPadValue,
-                style: const TextStyle(fontSize: 24),
-              ),
-            ],
-          ),
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () => _moveForward(true),
+                  icon: Icon(Icons.arrow_upward),
+                  color: _isMovingForward ? Colors.blue : null,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () => _turnLeft(true),
+                  icon: Icon(Icons.arrow_left),
+                  color: _isTurningLeft ? Colors.blue : null,
+                ),
+                SizedBox(width: 50),
+                IconButton(
+                  onPressed: () => _turnRight(true),
+                  icon: Icon(Icons.arrow_right),
+                  color: _isTurningRight ? Colors.blue : null,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () => _moveBackward(true),
+                  icon: Icon(Icons.arrow_downward),
+                  color: _isMovingBackward ? Colors.blue : null,
+                ),
+              ],
+            ),
+            SizedBox(height: 50),
+            ElevatedButton(
+              onPressed: _stop,
+              child: Text('Arrêter'),
+            ),
+          ],
+        ),
       ),
     );
   }

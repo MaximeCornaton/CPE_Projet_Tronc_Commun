@@ -3,9 +3,10 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 
 import 'components/cSwitch.dart';
 import 'components/cButton.dart';
+import 'pPage.dart';
 
-class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+class SettingsPage extends BasePage {
+  SettingsPage() : super(title: 'Paramètres');
 
   @override
   SettingsPageState createState() => SettingsPageState();
