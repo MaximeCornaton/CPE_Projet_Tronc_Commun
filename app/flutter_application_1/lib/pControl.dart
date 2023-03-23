@@ -59,8 +59,12 @@ class _ControlPageState extends State<ControlPage> {
               children: [
                 IconButton(
                   onPressed: () => _moveForward(true),
-                  icon: Icon(Icons.arrow_upward),
-                  color: _isMovingForward ? Colors.blue : null,
+                  icon: const Icon(Icons.keyboard_arrow_up_rounded),
+                  color: _isMovingForward
+                      ? Theme.of(context)
+                          .bottomNavigationBarTheme
+                          .selectedItemColor
+                      : null,
                 ),
               ],
             ),
@@ -69,14 +73,22 @@ class _ControlPageState extends State<ControlPage> {
               children: [
                 IconButton(
                   onPressed: () => _turnLeft(true),
-                  icon: Icon(Icons.arrow_left),
-                  color: _isTurningLeft ? Colors.blue : null,
+                  icon: const Icon(Icons.keyboard_arrow_left_rounded),
+                  color: _isTurningLeft
+                      ? Theme.of(context)
+                          .bottomNavigationBarTheme
+                          .selectedItemColor
+                      : null,
                 ),
-                SizedBox(width: 50),
+                const SizedBox(width: 50),
                 IconButton(
                   onPressed: () => _turnRight(true),
-                  icon: Icon(Icons.arrow_right),
-                  color: _isTurningRight ? Colors.blue : null,
+                  icon: const Icon(Icons.keyboard_arrow_right_rounded),
+                  color: _isTurningRight
+                      ? Theme.of(context)
+                          .bottomNavigationBarTheme
+                          .selectedItemColor
+                      : null,
                 ),
               ],
             ),
@@ -85,8 +97,12 @@ class _ControlPageState extends State<ControlPage> {
               children: [
                 IconButton(
                   onPressed: () => _moveBackward(true),
-                  icon: Icon(Icons.arrow_downward),
-                  color: _isMovingBackward ? Colors.blue : null,
+                  icon: const Icon(Icons.keyboard_arrow_down_rounded),
+                  color: _isMovingBackward
+                      ? Theme.of(context)
+                          .bottomNavigationBarTheme
+                          .selectedItemColor
+                      : null,
                 ),
               ],
             ),
