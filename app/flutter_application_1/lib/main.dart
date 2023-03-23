@@ -83,7 +83,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     SettingsPage(),
   ];
 
-  List<String> _pageTitles =
+  final List<String> _pageTitles =
       _pages.map((page) => (page as BasePage).title).toList();
 
   void _onItemTapped(int index) {
