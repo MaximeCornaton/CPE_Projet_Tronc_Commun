@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 
+import 'pPage.dart';
 import 'pSettings.dart';
 import 'pHome.dart';
 import 'pControl.dart';
@@ -82,13 +83,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     SettingsPage(),
   ];
 
-  final List<String> _pageTitles = [
-    'Accueil',
-    'Contrôle',
-    'Carte',
-    'Chat',
-    'Paramètres'
-  ];
+  List<String> _pageTitles =
+      _pages.map((page) => (page as BasePage).title).toList();
 
   void _onItemTapped(int index) {
     setState(() {
