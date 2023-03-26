@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pPage.dart';
 
@@ -50,7 +51,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   Future<void> _initializeVideoPlayer() async {
     try {
       _controller = VideoPlayerController.network(
-        'https://example.com/camera-feed',
+        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
       );
       await _controller.initialize();
       setState(() {
@@ -59,7 +60,9 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
       _controller.setLooping(true);
       _controller.play();
     } catch (e) {
-      // handle video initialization error here
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
