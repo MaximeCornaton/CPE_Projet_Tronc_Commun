@@ -7,7 +7,7 @@ import 'pPage.dart';
 class ChatPage extends BasePage {
   final bool showAnswers;
 
-  ChatPage({this.showAnswers = false, super.key}) : super(title: 'Paramètres');
+  ChatPage({this.showAnswers = false, super.key}) : super(title: 'Chat');
 
   @override
   ChatPageState createState() => ChatPageState();
