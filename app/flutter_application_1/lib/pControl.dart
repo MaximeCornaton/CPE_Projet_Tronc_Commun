@@ -1,14 +1,112 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pPage.dart';
 
+import 'package:video_player/video_player.dart';
+
 class ControlPage extends BasePage {
-  ControlPage() : super(title: 'Contrôle');
+  ControlPage({super.key}) : super(title: 'Contrôle');
 
   @override
-  _ControlPageState createState() => _ControlPageState();
+  ControlPageState createState() => ControlPageState();
 }
 
-class _ControlPageState extends State<ControlPage> {
+class ControlPageState extends State<ControlPage> {
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(50.0),
+            child: VideoPlayerWidget(),
+          ),
+          Padding(
+            padding: EdgeInsets.all(30.0),
+            child: ControlButtons(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class VideoPlayerWidget extends StatefulWidget {
+  const VideoPlayerWidget({super.key});
+
+  @override
+  VideoPlayerWidgetState createState() => VideoPlayerWidgetState();
+}
+
+class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
+  late VideoPlayerController _controller;
+  bool _isInitialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeVideoPlayer();
+  }
+
+  Future<void> _initializeVideoPlayer() async {
+    try {
+      _controller = VideoPlayerController.network(
+        'https://example.com/camera-feed',
+      );
+      await _controller.initialize();
+      setState(() {
+        _isInitialized = true;
+      });
+      _controller.setLooping(true);
+      _controller.play();
+    } catch (e) {
+      // handle video initialization error here
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      width: MediaQuery.of(context).size.width * 0.8,
+      decoration: BoxDecoration(
+        border: Border.all(
+            color:
+                Theme.of(context).bottomNavigationBarTheme.selectedItemColor ??
+                    Colors.grey),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Stack(
+        children: [
+          _isInitialized
+              ? AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio,
+                  child: VideoPlayer(_controller),
+                )
+              : Container(),
+          if (!_isInitialized)
+            const Center(
+              child: CircularProgressIndicator(),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class ControlButtons extends StatefulWidget {
+  const ControlButtons({Key? key}) : super(key: key);
+
+  @override
+  ControlButtonsState createState() => ControlButtonsState();
+}
+
+class ControlButtonsState extends State<ControlButtons> {
   bool _isMovingForward = false;
   bool _isMovingBackward = false;
   bool _isTurningLeft = false;
@@ -47,73 +145,64 @@ class _ControlPageState extends State<ControlPage> {
     });
   }
 
+  Widget _buildJoystickButton(
+      IconData icon, bool isPressed, Function(bool) onPressedFunction) {
+    return IconButton(
+      onPressed: () => onPressedFunction(!isPressed),
+      icon: Icon(icon),
+      color: isPressed
+          ? Theme.of(context).bottomNavigationBarTheme.selectedItemColor
+          : null,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: () => _moveForward(true),
-                  icon: const Icon(Icons.keyboard_arrow_up_rounded),
-                  color: _isMovingForward
-                      ? Theme.of(context)
-                          .bottomNavigationBarTheme
-                          .selectedItemColor
-                      : null,
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: () => _turnLeft(true),
-                  icon: const Icon(Icons.keyboard_arrow_left_rounded),
-                  color: _isTurningLeft
-                      ? Theme.of(context)
-                          .bottomNavigationBarTheme
-                          .selectedItemColor
-                      : null,
-                ),
-                const SizedBox(width: 50),
-                IconButton(
-                  onPressed: () => _turnRight(true),
-                  icon: const Icon(Icons.keyboard_arrow_right_rounded),
-                  color: _isTurningRight
-                      ? Theme.of(context)
-                          .bottomNavigationBarTheme
-                          .selectedItemColor
-                      : null,
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: () => _moveBackward(true),
-                  icon: const Icon(Icons.keyboard_arrow_down_rounded),
-                  color: _isMovingBackward
-                      ? Theme.of(context)
-                          .bottomNavigationBarTheme
-                          .selectedItemColor
-                      : null,
-                ),
-              ],
-            ),
-            SizedBox(height: 50),
-            ElevatedButton(
-              onPressed: _stop,
-              child: Text('Arrêter'),
+            _buildJoystickButton(
+              Icons.keyboard_arrow_up_rounded,
+              _isMovingForward,
+              _moveForward,
             ),
           ],
         ),
-      ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildJoystickButton(
+              Icons.keyboard_arrow_left_rounded,
+              _isTurningLeft,
+              _turnLeft,
+            ),
+            const SizedBox(width: 50),
+            _buildJoystickButton(
+              Icons.keyboard_arrow_right_rounded,
+              _isTurningRight,
+              _turnRight,
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildJoystickButton(
+              Icons.keyboard_arrow_down_rounded,
+              _isMovingBackward,
+              _moveBackward,
+            ),
+          ],
+        ),
+        const SizedBox(height: 50),
+        ElevatedButton(
+          onPressed: _stop,
+          child: const Text('Arrêter'),
+        ),
+      ],
     );
   }
 }
