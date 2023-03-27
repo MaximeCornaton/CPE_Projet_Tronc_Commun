@@ -74,22 +74,26 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var borderRadius_ = BorderRadius.circular(10);
     return Container(
-      height: 200,
-      width: MediaQuery.of(context).size.width * 0.8,
+      //height: 200,
+      //width: MediaQuery.of(context).size.width * 0.8,
       decoration: BoxDecoration(
         border: Border.all(
             color:
                 Theme.of(context).bottomNavigationBarTheme.selectedItemColor ??
                     Colors.grey),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: borderRadius_,
       ),
       child: Stack(
         children: [
           _isInitialized
               ? AspectRatio(
                   aspectRatio: _controller.value.aspectRatio,
-                  child: VideoPlayer(_controller),
+                  child: ClipRRect(
+                    borderRadius: borderRadius_,
+                    child: VideoPlayer(_controller),
+                  ),
                 )
               : Container(),
           if (!_isInitialized)

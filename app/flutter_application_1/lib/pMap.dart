@@ -4,7 +4,7 @@ import 'cHttp.dart';
 import 'pPage.dart';
 
 class MapPage extends BasePage {
-  MapPage({Key? key}) : super(title: 'Carte');
+  MapPage({super.key}) : super(title: 'Carte');
 
   @override
   State<MapPage> createState() => _MapPageState();
