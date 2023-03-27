@@ -76,6 +76,8 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   Widget build(BuildContext context) {
     var borderRadius_ = BorderRadius.circular(10);
     return Container(
+      //height: MediaQuery.of(context).size.width * 0.8 / 1.7777777777777777,
+      //width: MediaQuery.of(context).size.width * 0.8,
       //height: 200,
       //width: MediaQuery.of(context).size.width * 0.8,
       decoration: BoxDecoration(
@@ -90,6 +92,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
           _isInitialized
               ? AspectRatio(
                   aspectRatio: _controller.value.aspectRatio,
+                  //aspectRatio: MediaQuery.of(context).size.width * 0.8 / 200,
                   child: ClipRRect(
                     borderRadius: borderRadius_,
                     child: VideoPlayer(_controller),
