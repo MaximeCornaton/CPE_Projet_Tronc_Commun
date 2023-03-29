@@ -51,7 +51,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   Future<void> _initializeVideoPlayer() async {
     try {
       _controller = VideoPlayerController.network(
-        'tcp://192.168.137.1:1234?listen',
+        'http://172.20.10.2/hls/stream.m3u8',
       );
       await _controller.initialize();
       setState(() {
