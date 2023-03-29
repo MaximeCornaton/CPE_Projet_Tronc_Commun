@@ -51,7 +51,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   Future<void> _initializeVideoPlayer() async {
     try {
       _controller = VideoPlayerController.network(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+        'tcp://192.168.137.1:1234?listen',
       );
       await _controller.initialize();
       setState(() {
@@ -68,18 +68,16 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
+    _controller.dispose();
+    
   }
 
   @override
   Widget build(BuildContext context) {
     var borderRadius_ = BorderRadius.circular(10);
     return Container(
-      //height: MediaQuery.of(context).size.width * 0.8 / 1.7777777777777777,
-      //width: MediaQuery.of(context).size.width * 0.8,
-      //height: 200,
-      //width: MediaQuery.of(context).size.width * 0.8,
+
       decoration: BoxDecoration(
         border: Border.all(
             color:
@@ -92,7 +90,6 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
           _isInitialized
               ? AspectRatio(
                   aspectRatio: _controller.value.aspectRatio,
-                  //aspectRatio: MediaQuery.of(context).size.width * 0.8 / 200,
                   child: ClipRRect(
                     borderRadius: borderRadius_,
                     child: VideoPlayer(_controller),
