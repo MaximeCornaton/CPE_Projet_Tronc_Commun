@@ -70,14 +70,12 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   void dispose() {
     super.dispose();
     _controller.dispose();
-    
   }
 
   @override
   Widget build(BuildContext context) {
     var borderRadius_ = BorderRadius.circular(10);
     return Container(
-
       decoration: BoxDecoration(
         border: Border.all(
             color:

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pPage.dart';
 
 import 'package:video_player/video_player.dart';
+import 'package:chewie/chewie.dart';
 
 class ControlPage extends BasePage {
   ControlPage({super.key}) : super(title: 'Contrôle');
@@ -39,7 +40,7 @@ class VideoPlayerWidget extends StatefulWidget {
 }
 
 class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
-  late VideoPlayerController _controller;
+  late ChewieController _chewieController;
   bool _isInitialized = false;
 
   @override
@@ -50,15 +51,20 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   Future<void> _initializeVideoPlayer() async {
     try {
-      _controller = VideoPlayerController.network(
+      VideoPlayerController videoPlayerController =
+          VideoPlayerController.network(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
       );
-      await _controller.initialize();
+      await videoPlayerController.initialize();
       setState(() {
         _isInitialized = true;
       });
-      _controller.setLooping(true);
-      _controller.play();
+
+      _chewieController = ChewieController(
+        videoPlayerController: videoPlayerController,
+        autoPlay: true,
+        looping: true,
+      );
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -69,7 +75,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
+    _chewieController.dispose();
   }
 
   @override
@@ -87,10 +93,13 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         children: [
           _isInitialized
               ? AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
+                  aspectRatio:
+                      _chewieController.videoPlayerController.value.aspectRatio,
                   child: ClipRRect(
                     borderRadius: borderRadius_,
-                    child: VideoPlayer(_controller),
+                    child: Chewie(
+                      controller: _chewieController,
+                    ),
                   ),
                 )
               : Container(),
