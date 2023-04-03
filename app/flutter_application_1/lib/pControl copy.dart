@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pPage.dart';
 
-import 'package:camera/camera.dart';
+import 'package:video_player/video_player.dart';
 
 class ControlPage extends BasePage {
   ControlPage({super.key}) : super(title: 'Contrôle');
@@ -39,26 +39,26 @@ class VideoPlayerWidget extends StatefulWidget {
 }
 
 class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
-  late CameraController _controller;
+  late VideoPlayerController _controller;
   bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    _initializeCamera();
+    _initializeVideoPlayer();
   }
 
-  Future<void> _initializeCamera() async {
+  Future<void> _initializeVideoPlayer() async {
     try {
-      List<CameraDescription> cameras = await availableCameras();
-      _controller = CameraController(cameras[0], ResolutionPreset.high);
+      _controller = VideoPlayerController.network(
+        'http://172.20.10.2/hls/stream.m3u8',
+      );
       await _controller.initialize();
       setState(() {
         _isInitialized = true;
       });
-      _controller.startImageStream((CameraImage image) {
-        // Traitement de l'image
-      });
+      _controller.setLooping(true);
+      _controller.play();
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -69,13 +69,15 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   @override
   void dispose() {
     super.dispose();
-    _controller?.dispose();
+    _controller.dispose();
+    
   }
 
   @override
   Widget build(BuildContext context) {
     var borderRadius_ = BorderRadius.circular(10);
     return Container(
+
       decoration: BoxDecoration(
         border: Border.all(
             color:
@@ -90,7 +92,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                   aspectRatio: _controller.value.aspectRatio,
                   child: ClipRRect(
                     borderRadius: borderRadius_,
-                    child: CameraPreview(_controller),
+                    child: VideoPlayer(_controller),
                   ),
                 )
               : Container(),
