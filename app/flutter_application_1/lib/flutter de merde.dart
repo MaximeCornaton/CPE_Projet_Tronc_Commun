@@ -30,7 +30,7 @@ class _WebRTCExampleState extends State<WebRTCExample> {
     },
     'optional': [],
   };
-  RTCPeerConnection _peerConnection;
+  late RTCPeerConnection _peerConnection;
   RTCVideoRenderer _videoRenderer = RTCVideoRenderer();
 
   @override
