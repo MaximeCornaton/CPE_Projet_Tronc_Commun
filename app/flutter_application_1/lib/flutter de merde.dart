@@ -35,8 +35,7 @@ class _WebRTCExampleState extends State<WebRTCExample> {
 
   @override
   void initState() {
-    super
-    initState();
+    super.initState();
     initRenderer();
     initWebRTC();
   }

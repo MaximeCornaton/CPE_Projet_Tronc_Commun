@@ -1,9 +1,10 @@
-import 'package:flutter/foundation.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pPage.dart';
 
-import 'package:video_player/video_player.dart';
-import 'package:chewie/chewie.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:web_socket_channel/io.dart';
 
 class ControlPage extends BasePage {
   ControlPage({super.key}) : super(title: 'Contrôle');
@@ -20,7 +21,7 @@ class ControlPageState extends State<ControlPage> {
         children: [
           Padding(
             padding: EdgeInsets.all(50.0),
-            child: VideoPlayerWidget(),
+            child: WebRTCWidget(),
           ),
           Padding(
             padding: EdgeInsets.all(30.0),
@@ -32,50 +33,76 @@ class ControlPageState extends State<ControlPage> {
   }
 }
 
-class VideoPlayerWidget extends StatefulWidget {
-  const VideoPlayerWidget({super.key});
+class WebRTCWidget extends StatefulWidget {
+  const WebRTCWidget({super.key});
 
   @override
-  VideoPlayerWidgetState createState() => VideoPlayerWidgetState();
+  WebRTCWidgetState createState() => WebRTCWidgetState();
 }
 
-class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
-  late ChewieController _chewieController;
-  bool _isInitialized = false;
+class WebRTCWidgetState extends State<WebRTCWidget> {
+  late IOWebSocketChannel _channel;
+  final _sdpConstraints = {
+    'mandatory': {
+      'OfferToReceiveAudio': true,
+      'OfferToReceiveVideo': true,
+    },
+    'optional': [],
+  };
+  late RTCPeerConnection _peerConnection;
+  RTCVideoRenderer _videoRenderer = RTCVideoRenderer();
+  bool _isConnected = false;
+  bool _isWebSocketConnected = false;
+
+  Future<void> initRenderer() async {
+    await _videoRenderer.initialize();
+  }
 
   @override
   void initState() {
     super.initState();
-    _initializeVideoPlayer();
+    initRenderer();
+    initWebRTC();
   }
 
-  Future<void> _initializeVideoPlayer() async {
+  Future<void> initWebRTC() async {
     try {
-      VideoPlayerController videoPlayerController =
-          VideoPlayerController.network(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-      );
-      await videoPlayerController.initialize();
-      setState(() {
-        _isInitialized = true;
+      _channel = IOWebSocketChannel.connect('ws://localhost:8080');
+      _peerConnection = await createPeerConnection(_sdpConstraints);
+      _peerConnection.onTrack = (RTCTrackEvent event) {
+        if (event.track.kind == 'video') {
+          _videoRenderer.srcObject = event.streams[0];
+        }
+      };
+
+      _channel.stream.listen((message) {
+        final parsedMessage = jsonDecode(message);
+        if (parsedMessage['id'] == 'startResponse') {
+          _peerConnection.setRemoteDescription(
+              RTCSessionDescription(parsedMessage['sdpAnswer'], 'answer'));
+        }
       });
 
-      _chewieController = ChewieController(
-        videoPlayerController: videoPlayerController,
-        autoPlay: true,
-        looping: true,
-      );
+      final offer = await _peerConnection.createOffer(_sdpConstraints);
+      await _peerConnection.setLocalDescription(offer);
+      _channel.sink.add(jsonEncode({'id': 'start', 'sdpOffer': offer.sdp}));
+      setState(() {
+        _isConnected = true;
+      });
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      print('WebSocket Connection Error: $e');
+      setState(() {
+        _isWebSocketConnected = false;
+      });
     }
   }
 
   @override
   void dispose() {
+    _videoRenderer.dispose();
+    _peerConnection.dispose();
+    _channel.sink.close();
     super.dispose();
-    _chewieController.dispose();
   }
 
   @override
@@ -89,26 +116,15 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                     Colors.grey),
         borderRadius: borderRadius_,
       ),
-      child: Stack(
-        children: [
-          _isInitialized
-              ? AspectRatio(
-                  aspectRatio:
-                      _chewieController.videoPlayerController.value.aspectRatio,
-                  child: ClipRRect(
-                    borderRadius: borderRadius_,
-                    child: Chewie(
-                      controller: _chewieController,
-                    ),
-                  ),
-                )
-              : Container(),
-          if (!_isInitialized)
-            const Center(
-              child: CircularProgressIndicator(),
+      child: _isWebSocketConnected
+          ? (_isConnected
+              ? RTCVideoView(_videoRenderer)
+              : const Center(
+                  child: CircularProgressIndicator(),
+                ))
+          : const Center(
+              child: Text("Connexion WebSocket échouée"),
             ),
-        ],
-      ),
     );
   }
 }

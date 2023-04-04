@@ -44,6 +44,8 @@ dependencies:
   video_player: ^2.6.0
   flutter_vlc_player: ^7.2.0
   chewie: ^1.4.0
+  flutter_webrtc: ^0.9.24
+  web_socket_channel: ^2.3.0
 
 dev_dependencies:
   flutter_test:
