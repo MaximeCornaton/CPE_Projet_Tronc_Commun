@@ -49,7 +49,7 @@ class ChatPageState extends State<ChatPage> {
               },
               onTap: () async {
                 final message = _textController.text;
-                final response = await sendMessage(message);
+                final response = await _sendChatMessage(message);
                 setState(() {
                   _messages.add({'message': message, 'response': response});
                 });
@@ -136,9 +136,11 @@ class ChatPageState extends State<ChatPage> {
     ));
   }
 
-  Future<String> sendMessage(String message) async {
+  Future<String> _sendChatMessage(String message) async {
     // logique pour envoyer le message
-    Album album = await createAlbum(message);
+    
+    createAlbum('chat',message);
+    final Album album = await fetchAlbum();
     String response = album.title;
     return response;
   }

@@ -6,6 +6,8 @@ import 'package:flutter_application_1/pPage.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:web_socket_channel/io.dart';
 
+import 'cHttp.dart';
+
 class ControlPage extends BasePage {
   ControlPage({super.key}) : super(title: 'Contrôle');
 
@@ -50,7 +52,7 @@ class WebRTCWidgetState extends State<WebRTCWidget> {
     'optional': [],
   };
   late RTCPeerConnection _peerConnection;
-  RTCVideoRenderer _videoRenderer = RTCVideoRenderer();
+  final RTCVideoRenderer _videoRenderer = RTCVideoRenderer();
   bool _isConnected = false;
   bool _isWebSocketConnected = false;
 
@@ -90,7 +92,7 @@ class WebRTCWidgetState extends State<WebRTCWidget> {
         _isConnected = true;
       });
     } catch (e) {
-      print('WebSocket Connection Error: $e');
+      print('Error: WebSocket Connection Error: $e');
       setState(() {
         _isWebSocketConnected = false;
       });
@@ -123,8 +125,8 @@ class WebRTCWidgetState extends State<WebRTCWidget> {
                   child: CircularProgressIndicator(),
                 ))
           : const Center(
-              child: Text("Connexion WebSocket échouée"),
-            ),
+                  child: CircularProgressIndicator(),
+                ),
     );
   }
 }
@@ -142,28 +144,43 @@ class ControlButtonsState extends State<ControlButtons> {
   bool _isTurningLeft = false;
   bool _isTurningRight = false;
 
+  void _sendControlMessage() async {
+    // logique pour envoyer le message
+    final message = {
+      'move_forward': _isMovingForward.toString(),
+      'move_backward': _isMovingBackward.toString(),
+      'turn_left': _isTurningLeft.toString(),
+      'turn_right': _isTurningRight.toString(),
+    };
+    createAlbum('control',message.toString());
+  }
+
   void _moveForward(bool value) {
     setState(() {
       _isMovingForward = value;
     });
+    _sendControlMessage();
   }
 
   void _moveBackward(bool value) {
     setState(() {
       _isMovingBackward = value;
     });
+    _sendControlMessage();
   }
 
   void _turnLeft(bool value) {
     setState(() {
       _isTurningLeft = value;
     });
+    _sendControlMessage();
   }
 
   void _turnRight(bool value) {
     setState(() {
       _isTurningRight = value;
     });
+    _sendControlMessage();
   }
 
   void _stop() {
@@ -173,6 +190,7 @@ class ControlButtonsState extends State<ControlButtons> {
       _isTurningLeft = false;
       _isTurningRight = false;
     });
+    _sendControlMessage();
   }
 
   Widget _buildJoystickButton(
