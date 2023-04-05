@@ -63,7 +63,7 @@ void createAlbum(String title, String body_) async {
       throw Exception('Failed to create album.');
     }
   } catch (e) {
-    print(e);
+    print('An error occurred while creating the album: $e');
     // You can display an error message to the user here
   }
 }
