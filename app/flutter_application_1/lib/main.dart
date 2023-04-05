@@ -118,7 +118,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             label: '•',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.threed_rotation),
+            icon: Icon(Icons.route),
             label: '•',
           ),
           BottomNavigationBarItem(
