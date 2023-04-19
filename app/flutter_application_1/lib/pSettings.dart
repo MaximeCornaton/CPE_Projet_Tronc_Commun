@@ -6,7 +6,7 @@ import 'components/cButton.dart';
 import 'pPage.dart';
 
 class SettingsPage extends BasePage {
-  SettingsPage() : super(title: 'Paramètres');
+  SettingsPage({super.key}) : super(title: 'Paramètres');
 
   @override
   SettingsPageState createState() => SettingsPageState();

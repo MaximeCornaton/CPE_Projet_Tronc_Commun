@@ -69,7 +69,7 @@ class WebRTCWidgetState extends State<WebRTCWidget> {
 
   Future<void> initWebRTC() async {
     try {
-      _channel = IOWebSocketChannel.connect('ws://localhost:8080');
+      _channel = IOWebSocketChannel.connect('ws://192.168.39.157/video');
       _peerConnection = await createPeerConnection(_sdpConstraints);
       _peerConnection.onTrack = (RTCTrackEvent event) {
         if (event.track.kind == 'video') {
