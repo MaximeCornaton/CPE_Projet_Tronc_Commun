@@ -18,9 +18,9 @@ class ControlPage extends BasePage {
 class ControlPageState extends State<ControlPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Column(
-        children: [
+        children: const [
           Padding(
             padding: EdgeInsets.all(50.0),
             child: WebRTCWidget(),
@@ -125,8 +125,8 @@ class WebRTCWidgetState extends State<WebRTCWidget> {
                   child: CircularProgressIndicator(),
                 ))
           : const Center(
-                  child: CircularProgressIndicator(),
-                ),
+              child: CircularProgressIndicator(),
+            ),
     );
   }
 }
@@ -152,7 +152,7 @@ class ControlButtonsState extends State<ControlButtons> {
       'turn_left': _isTurningLeft.toString(),
       'turn_right': _isTurningRight.toString(),
     };
-    createAlbum('control',message.toString());
+    createAlbum('control', message.toString());
   }
 
   void _moveForward(bool value) {

@@ -12,56 +12,44 @@ import 'pMap.dart';
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key});
 
   static const String _title = 'Projet Tronc Commun - Group A1';
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveTheme(
-      light: ThemeData(
+    return MaterialApp(
+      title: _title,
+      theme: ThemeData(
         fontFamily: 'Ubuntu',
         brightness: Brightness.light,
         primarySwatch: Colors.orange,
         primaryColor: Colors.grey[200],
-
-        //hintColor: Colors.amber,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           selectedItemColor: Colors.orange,
           unselectedItemColor: Colors.grey,
           backgroundColor: Colors.white,
         ),
       ),
-      dark: ThemeData(
+      darkTheme: ThemeData(
         fontFamily: 'Ubuntu',
         brightness: Brightness.dark,
         primarySwatch: Colors.orange,
         primaryColor: Colors.grey[900],
-        //hintColor: Colors.amber,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           selectedItemColor: Colors.orange,
           unselectedItemColor: Colors.white,
           backgroundColor: Colors.black,
         ),
-        appBarTheme: const AppBarTheme(
-            // Couleur de fond de la barre supérieure
-            ),
       ),
-      initial: MediaQuery.of(context).platformBrightness == Brightness.light
-          ? AdaptiveThemeMode.light
-          : AdaptiveThemeMode.dark,
-      builder: (theme, darkTheme) => MaterialApp(
-        title: _title,
-        theme: theme,
-        darkTheme: darkTheme,
-        home: const MyStatefulWidget(),
-        routes: {
-          '/home': (context) => HomePage(),
-          '/control': (context) => ControlPage(),
-          '/map': (context) => MapPage(),
-          '/settings': (context) => SettingsPage(),
-        },
-      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MyStatefulWidget(),
+        '/home': (context) => HomePage(),
+        '/control': (context) => ControlPage(),
+        '/map': (context) => MapPage(),
+        '/settings': (context) => SettingsPage(),
+      },
     );
   }
 }
