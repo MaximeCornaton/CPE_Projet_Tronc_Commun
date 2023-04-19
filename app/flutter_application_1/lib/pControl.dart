@@ -91,6 +91,7 @@ class WebRTCWidgetState extends State<WebRTCWidget> {
       _channel.sink.add(jsonEncode({'id': 'start', 'sdpOffer': offer.sdp}));
       setState(() {
         _isConnected = true;
+        _isWebSocketConnected = true;
       });
     } on WebSocketChannelException catch (e) {
       print('WebSocket Connection Error: $e');
