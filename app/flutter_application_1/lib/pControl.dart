@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pPage.dart';
 
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'cHttp.dart';
 
@@ -43,7 +43,7 @@ class WebRTCWidget extends StatefulWidget {
 }
 
 class WebRTCWidgetState extends State<WebRTCWidget> {
-  late IOWebSocketChannel _channel;
+  late WebSocketChannel _channel;
   final _sdpConstraints = {
     'mandatory': {
       'OfferToReceiveAudio': true,
@@ -69,7 +69,8 @@ class WebRTCWidgetState extends State<WebRTCWidget> {
 
   Future<void> initWebRTC() async {
     try {
-      _channel = IOWebSocketChannel.connect('ws://192.168.39.157/video');
+      _channel =
+          WebSocketChannel.connect(Uri.parse("ws://192.168.39.212:8889"));
       _peerConnection = await createPeerConnection(_sdpConstraints);
       _peerConnection.onTrack = (RTCTrackEvent event) {
         if (event.track.kind == 'video') {
@@ -91,11 +92,14 @@ class WebRTCWidgetState extends State<WebRTCWidget> {
       setState(() {
         _isConnected = true;
       });
-    } catch (e) {
-      print('Error: WebSocket Connection Error: $e');
+    } on WebSocketChannelException catch (e) {
+      print('WebSocket Connection Error: $e');
       setState(() {
         _isWebSocketConnected = false;
       });
+      print('WebSocket not connected!');
+    } catch (e) {
+      print('Error: $e');
     }
   }
 
