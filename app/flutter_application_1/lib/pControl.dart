@@ -125,7 +125,10 @@ class WebRTCWidgetState extends State<WebRTCWidget> {
       ),
       child: _isWebSocketConnected
           ? (_isConnected
-              ? RTCVideoView(_videoRenderer)
+              ? AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: RTCVideoView(_videoRenderer),
+                )
               : const Center(
                   child: CircularProgressIndicator(),
                 ))
