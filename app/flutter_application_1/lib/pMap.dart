@@ -16,23 +16,11 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    futureAlbum = fetchAlbum();
+    futureAlbum = fetchAlbum("MapPage");
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Album>(
-      future: futureAlbum,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Text(snapshot.data!.title);
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        }
-
-        // By default, show a loading spinner.
-        return const CircularProgressIndicator();
-      },
-    );
+    return const CircularProgressIndicator();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:flutter/scheduler.dart';
 
 import 'pPage.dart';
 import 'pSettings.dart';
@@ -11,15 +12,42 @@ import 'pMap.dart';
 
 void main() => runApp(const MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key});
 
   static const String _title = 'Projet Tronc Commun - Group A1';
 
   @override
+  State<MyApp> createState() => _MyAppState();
+
+  static _MyAppState of(BuildContext context) =>
+      context.findAncestorStateOfType<_MyAppState>()!;
+}
+
+class _MyAppState extends State<MyApp> {
+  ThemeMode _themeMode = ThemeMode.light;
+
+  void toggleThemeMode() {
+    setState(() {
+      _themeMode =
+          _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    });
+  }
+
+  void updateThemeMode() {
+    final Brightness platformBrightness =
+        SchedulerBinding.instance.window.platformBrightness;
+    setState(() {
+      _themeMode = platformBrightness == Brightness.dark
+          ? ThemeMode.dark
+          : ThemeMode.light;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: _title,
+      title: MyApp._title,
       theme: ThemeData(
         fontFamily: 'Ubuntu',
         brightness: Brightness.light,
@@ -42,15 +70,32 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.black,
         ),
       ),
-      initialRoute: '/',
+      themeMode: _themeMode,
+      home: const MyStatefulWidget(),
       routes: {
-        '/': (context) => const MyStatefulWidget(),
         '/home': (context) => HomePage(),
         '/control': (context) => ControlPage(),
         '/map': (context) => MapPage(),
         '/settings': (context) => SettingsPage(),
       },
+      builder: (BuildContext context, Widget? child) {
+        return GestureDetector(
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
+          child: child,
+        );
+      },
+      debugShowCheckedModeBanner: false,
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
 

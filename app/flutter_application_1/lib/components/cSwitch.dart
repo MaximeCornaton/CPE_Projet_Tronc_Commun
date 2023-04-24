@@ -25,6 +25,12 @@ class SwitchWidget extends StatefulWidget {
 class _SwitchWidgetState extends State<SwitchWidget> {
   bool _switchValue = false;
 
+  void SwitchOnOff() {
+    setState(() {
+      _switchValue = !_switchValue;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

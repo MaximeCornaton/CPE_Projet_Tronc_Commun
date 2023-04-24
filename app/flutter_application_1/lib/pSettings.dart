@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:adaptive_theme/adaptive_theme.dart';
 
 import 'components/cSwitch.dart';
 import 'components/cButton.dart';
 import 'pPage.dart';
+import 'main.dart';
 
 class SettingsPage extends BasePage {
   SettingsPage({super.key}) : super(title: 'Paramètres');
@@ -27,7 +27,7 @@ class SettingsPageState extends State<SettingsPage> {
             color_on: Theme.of(context).primaryColor,
             color_switch: Theme.of(context).primaryColor,
             onPressed: () {
-              AdaptiveTheme.of(context).toggleThemeMode();
+              MyApp.of(context).toggleThemeMode();
             },
             icon1: Icons.dark_mode_rounded,
             icon2: Icons.light_mode_rounded,
@@ -35,9 +35,9 @@ class SettingsPageState extends State<SettingsPage> {
           ButtonWidget(
             text: 'Utiliser le thème système',
             onPressed: () {
-              AdaptiveTheme.of(context).setSystem();
+              MyApp.of(context).updateThemeMode();
             },
-            icon: Icons.dark_mode_rounded,
+            icon: Icons.settings_brightness_rounded,
           ),
         ],
       ),

@@ -138,10 +138,10 @@ class ChatPageState extends State<ChatPage> {
 
   Future<String> _sendChatMessage(String message) async {
     // logique pour envoyer le message
-    
-    createAlbum('chat',message);
-    final Album album = await fetchAlbum();
-    String response = album.title;
+
+    createAlbum('chat', message);
+    final Album album = await fetchAlbum("response");
+    String response = album.body;
     return response;
   }
 }

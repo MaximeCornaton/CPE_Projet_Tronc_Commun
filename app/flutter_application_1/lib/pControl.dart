@@ -93,14 +93,8 @@ class WebRTCWidgetState extends State<WebRTCWidget> {
         _isConnected = true;
         _isWebSocketConnected = true;
       });
-    } on WebSocketChannelException catch (e) {
-      print('WebSocket Connection Error: $e');
-      setState(() {
-        _isWebSocketConnected = false;
-      });
-      print('WebSocket not connected!');
     } catch (e) {
-      print('Error: $e');
+      print('WebSocket Connection Error: $e');
     }
   }
 

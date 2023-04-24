@@ -23,26 +23,26 @@ class Album {
   }
 }
 
-Future<Album> fetchAlbum() async {
+Future<Album> fetchAlbum(String param) async {
   try {
-    final response = await http.get(Uri.parse('http://172.20.10.2:3000/data'));
+    final response =
+        await http.get(Uri.parse('http://172.20.10.2:3000/data/$param'));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
-      // then parse the JSON.
+      // then parse the JSON and return an Album object.
       return Album.fromJson(jsonDecode(response.body));
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('Failed to load album');
+      throw Exception('Failed to load data');
     }
   } catch (e) {
     // Handle the exception here, e.g. log it or display an error message to the user.
-    print('An error occurred while fetching the album: $e');
-    return const Album(id: 0, title: 'error', body: 'error');
+    print('An error occurred while fetching the data: $e');
+    return Album(id: 0, title: 'error', body: 'error');
   }
 }
-
 
 void createAlbum(String title, String body_) async {
   try {
