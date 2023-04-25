@@ -1,15 +1,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/cWebSocket.dart';
 import 'package:flutter_application_1/pPage.dart';
-
-import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'cHttp.dart';
 
 class ControlPage extends BasePage {
-  ControlPage({super.key}) : super(title: 'Contrôle');
+  final WebSocket webSocket;
+
+  ControlPage({Key? key, required this.webSocket})
+      : super(key: key, title: 'Contrôle');
 
   @override
   ControlPageState createState() => ControlPageState();
@@ -18,118 +19,42 @@ class ControlPage extends BasePage {
 class ControlPageState extends State<ControlPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: const [
-          Padding(
-            padding: EdgeInsets.all(50.0),
-            child: WebRTCWidget(),
-          ),
-          Padding(
-            padding: EdgeInsets.all(30.0),
-            child: ControlButtons(),
-          ),
-        ],
-      ),
-    );
+    return VideoWidget(webSocket: widget.webSocket);
   }
 }
 
-class WebRTCWidget extends StatefulWidget {
-  const WebRTCWidget({super.key});
+class VideoWidget extends StatefulWidget {
+  final WebSocket webSocket;
+
+  const VideoWidget({Key? key, required this.webSocket}) : super(key: key);
 
   @override
-  WebRTCWidgetState createState() => WebRTCWidgetState();
+  _VideoWidgetState createState() => _VideoWidgetState();
 }
 
-class WebRTCWidgetState extends State<WebRTCWidget> {
-  late WebSocketChannel _channel;
-  final _sdpConstraints = {
-    'mandatory': {
-      'OfferToReceiveAudio': true,
-      'OfferToReceiveVideo': true,
-    },
-    'optional': [],
-  };
-  late RTCPeerConnection _peerConnection;
-  final RTCVideoRenderer _videoRenderer = RTCVideoRenderer();
-  bool _isConnected = false;
-  bool _isWebSocketConnected = false;
-
-  Future<void> initRenderer() async {
-    await _videoRenderer.initialize();
-  }
+class _VideoWidgetState extends State<VideoWidget> {
+  late String imageBase64;
 
   @override
   void initState() {
     super.initState();
-    initRenderer();
-    initWebRTC();
-  }
-
-  Future<void> initWebRTC() async {
-    try {
-      _channel =
-          WebSocketChannel.connect(Uri.parse("ws://192.168.39.212:8889"));
-      _peerConnection = await createPeerConnection(_sdpConstraints);
-      _peerConnection.onTrack = (RTCTrackEvent event) {
-        if (event.track.kind == 'video') {
-          _videoRenderer.srcObject = event.streams[0];
-        }
-      };
-
-      _channel.stream.listen((message) {
-        final parsedMessage = jsonDecode(message);
-        if (parsedMessage['id'] == 'startResponse') {
-          _peerConnection.setRemoteDescription(
-              RTCSessionDescription(parsedMessage['sdpAnswer'], 'answer'));
-        }
-      });
-
-      final offer = await _peerConnection.createOffer(_sdpConstraints);
-      await _peerConnection.setLocalDescription(offer);
-      _channel.sink.add(jsonEncode({'id': 'start', 'sdpOffer': offer.sdp}));
-      setState(() {
-        _isConnected = true;
-        _isWebSocketConnected = true;
-      });
-    } catch (e) {
-      print('WebSocket Connection Error: $e');
-    }
-  }
-
-  @override
-  void dispose() {
-    _videoRenderer.dispose();
-    _peerConnection.dispose();
-    _channel.sink.close();
-    super.dispose();
+    widget.webSocket.connect(Uri.parse("ws://192.168.243.212:8889"));
+    setState(() {
+      imageBase64 = widget.webSocket.data;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    var borderRadius_ = BorderRadius.circular(10);
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-            color:
-                Theme.of(context).bottomNavigationBarTheme.selectedItemColor ??
-                    Colors.grey),
-        borderRadius: borderRadius_,
-      ),
-      child: _isWebSocketConnected
-          ? (_isConnected
-              ? AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: RTCVideoView(_videoRenderer),
-                )
-              : const Center(
-                  child: CircularProgressIndicator(),
-                ))
-          : const Center(
-              child: CircularProgressIndicator(),
-            ),
-    );
+    // return Container(
+    //   child: imageBase64 == null
+    //       ? const CircularProgressIndicator()
+    //       : Image.memory(
+    //           base64.decode(imageBase64),
+    //           fit: BoxFit.cover,
+    //         ),
+    // );
+    return Text(imageBase64);
   }
 }
 

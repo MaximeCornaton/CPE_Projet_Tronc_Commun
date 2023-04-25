@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/scheduler.dart';
 
+import 'cWebSocket.dart';
 import 'pPage.dart';
 import 'pSettings.dart';
 
@@ -18,13 +18,13 @@ class MyApp extends StatefulWidget {
   static const String _title = 'Projet Tronc Commun - Group A1';
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<MyApp> createState() => MyAppState();
 
-  static _MyAppState of(BuildContext context) =>
-      context.findAncestorStateOfType<_MyAppState>()!;
+  static MyAppState of(BuildContext context) =>
+      context.findAncestorStateOfType<MyAppState>()!;
 }
 
-class _MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.light;
 
   void toggleThemeMode() {
@@ -72,12 +72,6 @@ class _MyAppState extends State<MyApp> {
       ),
       themeMode: _themeMode,
       home: const MyStatefulWidget(),
-      routes: {
-        '/home': (context) => HomePage(),
-        '/control': (context) => ControlPage(),
-        '/map': (context) => MapPage(),
-        '/settings': (context) => SettingsPage(),
-      },
       builder: (BuildContext context, Widget? child) {
         return GestureDetector(
           onTap: () {
@@ -109,16 +103,43 @@ class MyStatefulWidget extends StatefulWidget {
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
 
-  static final List<Widget> _pages = <Widget>[
-    HomePage(),
-    ControlPage(),
-    MapPage(),
-    ChatPage(),
-    SettingsPage(),
-  ];
+  late WebSocket webSocket_video;
+  late WebSocket webSocket_message;
+  late WebSocket webSocket_map;
 
-  final List<String> _pageTitles =
-      _pages.map((page) => (page as BasePage).title).toList();
+  @override
+  void initState() {
+    super.initState();
+    webSocket_video = WebSocket();
+    webSocket_message = WebSocket();
+    //webSocket_message.connect(Uri.parse("ws://192.168.121.212:8888"));
+    //webSocket_video.connect(Uri.parse("ws://192.168.121.212:8889"));
+  }
+
+  @override
+  void dispose() {
+    webSocket_video.close();
+    webSocket_message.close();
+    super.dispose();
+  }
+
+  List<Widget> _pages() {
+    return [
+      HomePage(),
+      ControlPage(webSocket: webSocket_video),
+      MapPage(),
+      ChatPage(),
+      SettingsPage(),
+    ];
+  }
+
+  final List<String> _pageTitles = [
+    "Home",
+    "Control",
+    "Map",
+    "Chat",
+    "Settings"
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -132,14 +153,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       appBar: AppBar(
         title: Text(_pageTitles[_selectedIndex]),
       ),
-      body: Navigator(
-        onGenerateRoute: (RouteSettings settings) {
-          return MaterialPageRoute(
-            builder: (_) => _pages[_selectedIndex],
-            settings: settings,
-          );
-        },
-      ),
+      body: _pages()[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
