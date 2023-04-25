@@ -2,15 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/cWebSocket.dart';
-import 'package:flutter_application_1/pPage.dart';
 
 import 'cHttp.dart';
 
-class ControlPage extends BasePage {
-  final WebSocket webSocket;
+class ControlPage extends StatefulWidget {
+  final WebSocket webSocketVideo;
+  final WebSocket webSocketControl;
 
-  ControlPage({Key? key, required this.webSocket})
-      : super(key: key, title: 'Contrôle');
+  ControlPage(
+      {Key? key, required this.webSocketVideo, required this.webSocketControl})
+      : super(key: key);
 
   @override
   ControlPageState createState() => ControlPageState();
@@ -19,7 +20,7 @@ class ControlPage extends BasePage {
 class ControlPageState extends State<ControlPage> {
   @override
   Widget build(BuildContext context) {
-    return VideoWidget(webSocket: widget.webSocket);
+    return VideoWidget(webSocket: widget.webSocketVideo);
   }
 }
 
@@ -33,33 +34,37 @@ class VideoWidget extends StatefulWidget {
 }
 
 class _VideoWidgetState extends State<VideoWidget> {
-  late String imageBase64;
+  String imageBase64 = "";
 
   @override
   void initState() {
     super.initState();
-    widget.webSocket.connect(Uri.parse("ws://192.168.243.212:8889"));
+    widget.webSocket
+        .connect_funct(Uri.parse("ws://192.168.243.212:8889"), onImageReceived);
+  }
+
+  void onImageReceived(String imageBase64) {
     setState(() {
-      imageBase64 = widget.webSocket.data;
+      this.imageBase64 = imageBase64;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // return Container(
-    //   child: imageBase64 == null
-    //       ? const CircularProgressIndicator()
-    //       : Image.memory(
-    //           base64.decode(imageBase64),
-    //           fit: BoxFit.cover,
-    //         ),
-    // );
-    return Text(imageBase64);
+    return Container(
+      child: imageBase64.isEmpty
+          ? const CircularProgressIndicator()
+          : Image.memory(
+              base64.decode(imageBase64),
+              fit: BoxFit.cover,
+            ),
+    );
   }
 }
 
 class ControlButtons extends StatefulWidget {
-  const ControlButtons({Key? key}) : super(key: key);
+  const ControlButtons({Key? key, required this.webSocket}) : super(key: key);
+  final WebSocket webSocket;
 
   @override
   ControlButtonsState createState() => ControlButtonsState();
@@ -79,7 +84,7 @@ class ControlButtonsState extends State<ControlButtons> {
       'turn_left': _isTurningLeft.toString(),
       'turn_right': _isTurningRight.toString(),
     };
-    createAlbum('control', message.toString());
+    widget.webSocket.send(Message("control", jsonEncode(message)));
   }
 
   void _moveForward(bool value) {

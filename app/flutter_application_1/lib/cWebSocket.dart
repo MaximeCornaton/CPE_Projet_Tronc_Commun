@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -25,16 +26,27 @@ class Message {
 
 class WebSocket {
   late WebSocketChannel channel;
+  late Function(String) onDataREceived;
 
-  late String value;
+  String value = "";
 
-  String get data => data;
+  void connect_funct(Uri url, Function(String) onDataREceived) {
+    this.onDataREceived = onDataREceived;
+    channel = WebSocketChannel.connect(url);
+    channel.stream.listen((message) {
+      onReceive(message);
+    });
+  }
 
   void connect(Uri url) {
     channel = WebSocketChannel.connect(url);
     channel.stream.listen((message) {
       onReceive(message);
     });
+  }
+
+  void set_funct(Function(String) onDataREceived) {
+    this.onDataREceived = onDataREceived;
   }
 
   void send(Message message) {
@@ -70,13 +82,17 @@ class WebSocket {
     value = messageObject.value;
   }
 
-  void onVideoReceive(data) {
-    print("video: " + data);
+  void onVideoReceive(String imageBase64) {
+    onDataREceived(imageBase64);
   }
 
   void onMapReceive(data) {}
 
   void onMessageReceive(data) {
-    print("message: " + data);
+    value = data;
+  }
+
+  String getValue() {
+    return value;
   }
 }

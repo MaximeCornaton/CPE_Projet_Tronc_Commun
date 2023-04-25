@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:flutter_application_1/cWebSocket.dart';
 
 import 'cHttp.dart';
-import 'pPage.dart';
 
-class ChatPage extends BasePage {
+class ChatPage extends StatefulWidget {
   final bool showAnswers;
+  final WebSocket webSocket;
 
-  ChatPage({this.showAnswers = false, super.key}) : super(title: 'Chat');
+  ChatPage({this.showAnswers = false, super.key, required this.webSocket})
+      : super();
 
   @override
   ChatPageState createState() => ChatPageState();
@@ -16,7 +17,6 @@ class ChatPage extends BasePage {
 class ChatPageState extends State<ChatPage> {
   final TextEditingController _textController = TextEditingController();
   final List<Map<String, String>> _messages = [];
-  //Future<Album>? _futureAlbum;
 
   bool _isHovered = false;
   late bool _showAnswers;
@@ -25,6 +25,7 @@ class ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
     _showAnswers = widget.showAnswers;
+    widget.webSocket.connect(Uri.parse("ws://192.168.243.212:8889"));
   }
 
   Widget _buildTextComposer() {
@@ -139,10 +140,8 @@ class ChatPageState extends State<ChatPage> {
   Future<String> _sendChatMessage(String message) async {
     // logique pour envoyer le message
 
-    createAlbum('chat', message);
-    final Album album = await fetchAlbum("response");
-    String response = album.body;
-    return response;
+    widget.webSocket.send(Message("message", message));
+    return widget.webSocket.getValue();
   }
 }
 

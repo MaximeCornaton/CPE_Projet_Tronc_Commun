@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 import 'cWebSocket.dart';
-import 'pPage.dart';
 import 'pSettings.dart';
 
 import 'pHome.dart';
@@ -126,9 +125,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   List<Widget> _pages() {
     return [
       HomePage(),
-      ControlPage(webSocket: webSocket_video),
+      ControlPage(
+          webSocketVideo: webSocket_video, webSocketControl: webSocket_message),
       MapPage(),
-      ChatPage(),
+      ChatPage(webSocket: webSocket_message),
       SettingsPage(),
     ];
   }

@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'components/cSwitch.dart';
 import 'components/cButton.dart';
-import 'pPage.dart';
 import 'main.dart';
 
-class SettingsPage extends BasePage {
-  SettingsPage({super.key}) : super(title: 'Paramètres');
+class SettingsPage extends StatefulWidget {
+  SettingsPage({super.key}) : super();
 
   @override
   SettingsPageState createState() => SettingsPageState();

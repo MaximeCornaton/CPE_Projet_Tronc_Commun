@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 
-import 'pPage.dart';
-
-class HomePage extends BasePage {
-  HomePage() : super(title: 'Accueil');
+class HomePage extends StatefulWidget {
+  HomePage() : super();
 
   @override
   _HomePageState createState() => _HomePageState();
