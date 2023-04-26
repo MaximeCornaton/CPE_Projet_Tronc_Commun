@@ -25,6 +25,8 @@ class Message {
 }
 
 class WebSocket {
+  late Uri url;
+
   late WebSocketChannel channel;
   late Function(String) onDataREceived;
 
@@ -36,6 +38,10 @@ class WebSocket {
     channel.stream.listen((message) {
       onReceive(message);
     });
+  }
+
+  void saveUrl(Uri url) {
+    this.url = url;
   }
 
   void connect(Uri url) {

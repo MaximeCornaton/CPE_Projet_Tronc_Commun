@@ -111,7 +111,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     super.initState();
     webSocket_video = WebSocket();
     webSocket_message = WebSocket();
-    //webSocket_message.connect(Uri.parse("ws://192.168.121.212:8888"));
+    //webSocket_message.connect(Uri.parse("ws://192.168.1 21.212:8888"));
     //webSocket_video.connect(Uri.parse("ws://192.168.121.212:8889"));
   }
 
@@ -135,10 +135,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
   final List<String> _pageTitles = [
     "Home",
-    "Control",
-    "Map",
-    "Chat",
-    "Settings"
+    "Controles et vidéo",
+    "Cartographie",
+    "Envoi de message",
+    "Paramètres"
   ];
 
   void _onItemTapped(int index) {

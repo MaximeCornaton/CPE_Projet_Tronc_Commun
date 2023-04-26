@@ -3,13 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/cWebSocket.dart';
 
-import 'cHttp.dart';
-
 class ControlPage extends StatefulWidget {
   final WebSocket webSocketVideo;
   final WebSocket webSocketControl;
 
-  ControlPage(
+  const ControlPage(
       {Key? key, required this.webSocketVideo, required this.webSocketControl})
       : super(key: key);
 
@@ -20,7 +18,16 @@ class ControlPage extends StatefulWidget {
 class ControlPageState extends State<ControlPage> {
   @override
   Widget build(BuildContext context) {
-    return VideoWidget(webSocket: widget.webSocketVideo);
+    return Column(
+      children: [
+        Flexible(
+          child: VideoWidget(webSocket: widget.webSocketVideo),
+        ),
+        Expanded(
+          child: ControlButtons(webSocket: widget.webSocketControl),
+        ),
+      ],
+    );
   }
 }
 
@@ -40,10 +47,16 @@ class _VideoWidgetState extends State<VideoWidget> {
   void initState() {
     super.initState();
     widget.webSocket
-        .connect_funct(Uri.parse("ws://192.168.243.212:8889"), onImageReceived);
+        .connect_funct(Uri.parse("ws://192.168.137.107:8889"), onDataREceived);
   }
 
-  void onImageReceived(String imageBase64) {
+  @override
+  void dispose() {
+    widget.webSocket.close();
+    super.dispose();
+  }
+
+  void onDataREceived(String imageBase64) {
     setState(() {
       this.imageBase64 = imageBase64;
     });
@@ -52,12 +65,33 @@ class _VideoWidgetState extends State<VideoWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: imageBase64.isEmpty
-          ? const CircularProgressIndicator()
-          : Image.memory(
-              base64.decode(imageBase64),
-              fit: BoxFit.cover,
+      margin: const EdgeInsets.only(top: 40, left: 20, right: 20),
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Theme.of(context)
+                        .bottomNavigationBarTheme
+                        .selectedItemColor ??
+                    Colors.black,
+                width: 2,
+              ),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(8),
+              ),
             ),
+            width: 640,
+            height: 480,
+            child: imageBase64.isEmpty
+                ? const Center(child: CircularProgressIndicator())
+                : Image.memory(
+                    base64.decode(imageBase64),
+                    fit: BoxFit.cover,
+                  ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -67,16 +101,22 @@ class ControlButtons extends StatefulWidget {
   final WebSocket webSocket;
 
   @override
-  ControlButtonsState createState() => ControlButtonsState();
+  _ControlButtonsState createState() => _ControlButtonsState();
 }
 
-class ControlButtonsState extends State<ControlButtons> {
+class _ControlButtonsState extends State<ControlButtons> {
   bool _isMovingForward = false;
   bool _isMovingBackward = false;
   bool _isTurningLeft = false;
   bool _isTurningRight = false;
 
-  void _sendControlMessage() async {
+  @override
+  void initState() {
+    super.initState();
+    widget.webSocket.connect(Uri.parse("ws://192.168.137.107:8888"));
+  }
+
+  Future<void> _sendControlMessage() async {
     // logique pour envoyer le message
     final message = {
       'move_forward': _isMovingForward.toString(),
