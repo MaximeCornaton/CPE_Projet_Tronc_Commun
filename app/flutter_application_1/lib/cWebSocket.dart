@@ -26,6 +26,7 @@ class Message {
 
 class WebSocket {
   late Uri url;
+  bool isConnected = false;
 
   late WebSocketChannel channel;
   late Function(String) onDataREceived;
@@ -34,21 +35,23 @@ class WebSocket {
 
   void connect_funct(Uri url, Function(String) onDataREceived) {
     this.onDataREceived = onDataREceived;
-    channel = WebSocketChannel.connect(url);
-    channel.stream.listen((message) {
-      onReceive(message);
-    });
+    connect(url);
+  }
+
+  void connect(Uri url) {
+    try {
+      channel = WebSocketChannel.connect(url);
+      isConnected = true;
+      channel.stream.listen((message) {
+        onReceive(message);
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   void saveUrl(Uri url) {
     this.url = url;
-  }
-
-  void connect(Uri url) {
-    channel = WebSocketChannel.connect(url);
-    channel.stream.listen((message) {
-      onReceive(message);
-    });
   }
 
   void set_funct(Function(String) onDataREceived) {
@@ -92,7 +95,9 @@ class WebSocket {
     onDataREceived(imageBase64);
   }
 
-  void onMapReceive(data) {}
+  void onMapReceive(String imageBase64) {
+    onDataREceived(imageBase64);
+  }
 
   void onMessageReceive(data) {
     value = data;
@@ -100,5 +105,9 @@ class WebSocket {
 
   String getValue() {
     return value;
+  }
+
+  bool isConnected_funct() {
+    return isConnected;
   }
 }

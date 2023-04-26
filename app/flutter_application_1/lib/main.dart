@@ -111,6 +111,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     super.initState();
     webSocket_video = WebSocket();
     webSocket_message = WebSocket();
+    webSocket_map = WebSocket();
     //webSocket_message.connect(Uri.parse("ws://192.168.1 21.212:8888"));
     //webSocket_video.connect(Uri.parse("ws://192.168.121.212:8889"));
   }
@@ -119,15 +120,19 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   void dispose() {
     webSocket_video.close();
     webSocket_message.close();
+    webSocket_map.close();
     super.dispose();
   }
 
   List<Widget> _pages() {
     return [
-      HomePage(),
+      HomePage(
+          webSocketVideo: webSocket_video,
+          webSocketControl: webSocket_message,
+          webSocketMap: webSocket_map),
       ControlPage(
           webSocketVideo: webSocket_video, webSocketControl: webSocket_message),
-      MapPage(),
+      MapPage(webSocket: webSocket_map),
       ChatPage(webSocket: webSocket_message),
       SettingsPage(),
     ];
