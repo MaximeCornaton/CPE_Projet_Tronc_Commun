@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 import 'cWebSocket.dart';
 import 'pSettings.dart';
@@ -9,7 +8,7 @@ import 'pControl.dart';
 import 'pChat.dart';
 import 'pMap.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key});
@@ -33,13 +32,19 @@ class MyAppState extends State<MyApp> {
     });
   }
 
+  @override
+  void initState() {
+    super.initState();
+    // Mettre à jour le thème en fonction de la luminosité actuelle au démarrage de l'application
+    //updateThemeMode();
+  }
+
   void updateThemeMode() {
-    final Brightness platformBrightness =
-        SchedulerBinding.instance.window.platformBrightness;
     setState(() {
-      _themeMode = platformBrightness == Brightness.dark
-          ? ThemeMode.dark
-          : ThemeMode.light;
+      final Brightness brightnessValue =
+          MediaQuery.of(context).platformBrightness;
+      _themeMode =
+          brightnessValue == Brightness.dark ? ThemeMode.dark : ThemeMode.light;
     });
   }
 
@@ -49,17 +54,6 @@ class MyAppState extends State<MyApp> {
       title: MyApp._title,
       theme: ThemeData(
         fontFamily: 'Ubuntu',
-        brightness: Brightness.light,
-        primarySwatch: Colors.orange,
-        primaryColor: Colors.grey[200],
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          selectedItemColor: Colors.orange,
-          unselectedItemColor: Colors.grey,
-          backgroundColor: Colors.white,
-        ),
-      ),
-      darkTheme: ThemeData(
-        fontFamily: 'Ubuntu',
         brightness: Brightness.dark,
         primarySwatch: Colors.orange,
         primaryColor: Colors.grey[900],
@@ -67,6 +61,17 @@ class MyAppState extends State<MyApp> {
           selectedItemColor: Colors.orange,
           unselectedItemColor: Colors.white,
           backgroundColor: Colors.black,
+        ),
+      ),
+      darkTheme: ThemeData(
+        fontFamily: 'Ubuntu',
+        brightness: Brightness.light,
+        primarySwatch: Colors.orange,
+        primaryColor: Colors.grey[200],
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          selectedItemColor: Colors.orange,
+          unselectedItemColor: Colors.grey,
+          backgroundColor: Colors.white,
         ),
       ),
       themeMode: _themeMode,

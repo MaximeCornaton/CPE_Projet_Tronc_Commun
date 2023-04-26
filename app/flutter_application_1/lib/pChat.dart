@@ -192,7 +192,7 @@ class ChatMessageState extends State<ChatMessage> {
             .showResponses) // afficher le message de réponse si showResponses est true
           Container(
             decoration: const BoxDecoration(
-              color: Colors.black,
+              color: Colors.orange,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.zero,
                 topRight: Radius.circular(5.0),
