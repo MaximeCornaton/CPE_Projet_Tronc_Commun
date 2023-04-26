@@ -41,12 +41,13 @@ class WebSocket {
   void connect(Uri url) {
     try {
       channel = WebSocketChannel.connect(url);
-      isConnected = true;
       channel.stream.listen((message) {
         onReceive(message);
       });
+      isConnected = true;
     } catch (e) {
-      print(e);
+      print('WebSocket connection failed: $e');
+      isConnected = false;
     }
   }
 
@@ -59,10 +60,12 @@ class WebSocket {
   }
 
   void send(Message message) {
-    if (channel != null) {
-      final jsonString = jsonEncode(message.toJson());
-      channel.sink.add(jsonString);
+    if (!isConnected) {
+      print('WebSocket is not connected');
+      return;
     }
+    final jsonString = jsonEncode(message.toJson());
+    channel.sink.add(jsonString);
   }
 
   void close() {
