@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Container(
-        margin: const EdgeInsets.fromLTRB(20, 30, 20, 20),
+        margin: const EdgeInsets.fromLTRB(12, 32, 12, 12),
         child: ConstrainedBox(
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,
