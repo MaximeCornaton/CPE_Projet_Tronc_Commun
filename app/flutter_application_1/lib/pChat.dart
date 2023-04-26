@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/cWebSocket.dart';
 
-import 'cHttp.dart';
-
 class ChatPage extends StatefulWidget {
   final bool showAnswers;
   final WebSocket webSocket;
@@ -26,6 +24,12 @@ class ChatPageState extends State<ChatPage> {
     super.initState();
     _showAnswers = widget.showAnswers;
     widget.webSocket.connect(Uri.parse("ws://192.168.243.212:8889"));
+  }
+
+  @override
+  void dispose() {
+    widget.webSocket.close();
+    super.dispose();
   }
 
   Widget _buildTextComposer() {

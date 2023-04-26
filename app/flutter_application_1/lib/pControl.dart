@@ -116,6 +116,12 @@ class _ControlButtonsState extends State<ControlButtons> {
     widget.webSocket.connect(Uri.parse("ws://192.168.137.107:8888"));
   }
 
+  @override
+  void dispose() {
+    widget.webSocket.close();
+    super.dispose();
+  }
+
   Future<void> _sendControlMessage() async {
     // logique pour envoyer le message
     final message = {
