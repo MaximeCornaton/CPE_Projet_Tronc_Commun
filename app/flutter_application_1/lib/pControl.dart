@@ -46,8 +46,7 @@ class _VideoWidgetState extends State<VideoWidget> {
   @override
   void initState() {
     super.initState();
-    widget.webSocket
-        .connect_funct(Uri.parse("ws://192.168.137.107:8889"), onDataREceived);
+    widget.webSocket.connect_funct(onDataREceived);
   }
 
   @override
@@ -113,7 +112,7 @@ class _ControlButtonsState extends State<ControlButtons> {
   @override
   void initState() {
     super.initState();
-    widget.webSocket.connect(Uri.parse("ws://192.168.137.107:8888"));
+    widget.webSocket.connect();
   }
 
   @override

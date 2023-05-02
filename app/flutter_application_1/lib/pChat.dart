@@ -23,7 +23,7 @@ class ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
     _showAnswers = widget.showAnswers;
-    widget.webSocket.connect(Uri.parse("ws://192.168.243.212:8889"));
+    widget.webSocket.connect();
   }
 
   @override

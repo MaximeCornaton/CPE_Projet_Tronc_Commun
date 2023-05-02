@@ -5,13 +5,45 @@ import 'components/cButton.dart';
 import 'main.dart';
 
 class SettingsPage extends StatefulWidget {
-  SettingsPage({super.key}) : super();
+  final String wbVideo;
+  final String wbMessage;
+  final String wbMap;
+
+  final Function updateString;
+
+  SettingsPage(
+      {super.key,
+      required this.updateString,
+      required this.wbVideo,
+      required this.wbMessage,
+      required this.wbMap})
+      : super();
 
   @override
   SettingsPageState createState() => SettingsPageState();
 }
 
 class SettingsPageState extends State<SettingsPage> {
+  late TextEditingController _wbVideoController;
+  late TextEditingController _wbMessageController;
+  late TextEditingController _wbMapController;
+
+  @override
+  void initState() {
+    super.initState();
+    _wbVideoController = TextEditingController(text: widget.wbVideo);
+    _wbMessageController = TextEditingController(text: widget.wbMessage);
+    _wbMapController = TextEditingController(text: widget.wbMap);
+  }
+
+  @override
+  void dispose() {
+    _wbVideoController.dispose();
+    _wbMessageController.dispose();
+    _wbMapController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +69,34 @@ class SettingsPageState extends State<SettingsPage> {
               MyApp.of(context).updateThemeMode();
             },
             icon: Icons.settings_brightness_rounded,
+          ),
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(24, 12, 24, 12),
+            child: Column(
+              children: [
+                TextField(
+                  decoration: InputDecoration(labelText: 'WebSocket Video'),
+                  controller: _wbVideoController,
+                  onChanged: (value) {
+                    widget.updateString('video', value);
+                  },
+                ),
+                TextField(
+                  decoration: InputDecoration(labelText: 'WebSocket Message'),
+                  controller: _wbMessageController,
+                  onChanged: (value) {
+                    widget.updateString('message', value);
+                  },
+                ),
+                TextField(
+                  decoration: InputDecoration(labelText: 'WebSocket Map'),
+                  controller: _wbMapController,
+                  onChanged: (value) {
+                    widget.updateString('map', value);
+                  },
+                ),
+              ],
+            ),
           ),
         ],
       ),

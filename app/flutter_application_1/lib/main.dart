@@ -107,39 +107,63 @@ class MyStatefulWidget extends StatefulWidget {
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
 
-  late WebSocket webSocket_video;
-  late WebSocket webSocket_message;
-  late WebSocket webSocket_map;
+  late WebSocket webSocketVideo;
+  late WebSocket webSocketMessage;
+  late WebSocket webSocketMap;
+
+  String wbVideo = "ws://192.168.137.107:8889";
+  String wbMessage = "ws://192.168.137.107:8888";
+  String wbMap = "ws://192.168.243.212:8887";
+
+  void updateString(String type, String value) {
+    setState(() {
+      if (type == "video") {
+        wbVideo = value;
+        webSocketVideo.saveUrl(Uri.parse(value));
+      } else if (type == "message") {
+        wbMessage = value;
+        webSocketMessage.saveUrl(Uri.parse(value));
+      } else if (type == "map") {
+        wbMap = value;
+        webSocketMap.saveUrl(Uri.parse(value));
+      }
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    webSocket_video = WebSocket();
-    webSocket_message = WebSocket();
-    webSocket_map = WebSocket();
-    //webSocket_message.connect(Uri.parse("ws://192.168.1 21.212:8888"));
-    //webSocket_video.connect(Uri.parse("ws://192.168.121.212:8889"));
+    webSocketVideo = WebSocket();
+    webSocketMessage = WebSocket();
+    webSocketMap = WebSocket();
+    webSocketVideo.saveUrl(Uri.parse(wbVideo));
+    webSocketMessage.saveUrl(Uri.parse(wbMessage));
+    webSocketMap.saveUrl(Uri.parse(wbMap));
   }
 
   @override
   void dispose() {
-    webSocket_video.close();
-    webSocket_message.close();
-    webSocket_map.close();
+    webSocketVideo.close();
+    webSocketMessage.close();
+    webSocketMap.close();
     super.dispose();
   }
 
   List<Widget> _pages() {
     return [
       HomePage(
-          webSocketVideo: webSocket_video,
-          webSocketControl: webSocket_message,
-          webSocketMap: webSocket_map),
+          webSocketVideo: webSocketVideo,
+          webSocketControl: webSocketMessage,
+          webSocketMap: webSocketMap),
       ControlPage(
-          webSocketVideo: webSocket_video, webSocketControl: webSocket_message),
-      MapPage(webSocket: webSocket_map),
-      ChatPage(webSocket: webSocket_message),
-      SettingsPage(),
+          webSocketVideo: webSocketVideo, webSocketControl: webSocketMessage),
+      MapPage(webSocket: webSocketMap),
+      ChatPage(webSocket: webSocketMessage),
+      SettingsPage(
+          updateString: this.updateString,
+          wbVideo: wbVideo,
+          wbMessage: wbMessage,
+          wbMap: wbMap),
     ];
   }
 

@@ -33,12 +33,12 @@ class WebSocket {
 
   String value = "";
 
-  void connect_funct(Uri url, Function(String) onDataREceived) {
+  void connect_funct(Function(String) onDataREceived) {
     this.onDataREceived = onDataREceived;
-    connect(url);
+    connect();
   }
 
-  void connect(Uri url) {
+  void connect() {
     try {
       channel = WebSocketChannel.connect(url);
       channel.stream.listen((message) {
