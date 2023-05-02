@@ -64,11 +64,11 @@ class SettingsPageState extends State<SettingsPage> {
             icon2: Icons.light_mode_rounded,
           ),
           ButtonWidget(
-            text: 'Utiliser le thème système',
+            text: 'Utiliser le thème sombre',
             onPressed: () {
               MyApp.of(context).updateThemeMode();
             },
-            icon: Icons.settings_brightness_rounded,
+            icon: Icons.dark_mode_rounded,
           ),
           Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(24, 12, 24, 12),
