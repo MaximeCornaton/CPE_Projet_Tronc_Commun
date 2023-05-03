@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/cWebSocket.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class ControlPage extends StatefulWidget {
   final WebSocket webSocketVideo;
@@ -37,28 +39,30 @@ class VideoWidget extends StatefulWidget {
   const VideoWidget({Key? key, required this.webSocket}) : super(key: key);
 
   @override
-  _VideoWidgetState createState() => _VideoWidgetState();
+  VideoWidgetState createState() => VideoWidgetState();
 }
 
-class _VideoWidgetState extends State<VideoWidget> {
+class VideoWidgetState extends State<VideoWidget> {
+  late StreamController<String> _streamController;
+
   String imageBase64 = "";
 
   @override
   void initState() {
     super.initState();
+    _streamController = StreamController<String>.broadcast();
     widget.webSocket.connect_funct(onDataREceived);
   }
 
   @override
   void dispose() {
+    _streamController.close();
     widget.webSocket.close();
     super.dispose();
   }
 
   void onDataREceived(String imageBase64) {
-    setState(() {
-      this.imageBase64 = imageBase64;
-    });
+    _streamController.add(imageBase64);
   }
 
   @override
@@ -82,12 +86,20 @@ class _VideoWidgetState extends State<VideoWidget> {
             ),
             width: 640,
             height: 480,
-            child: imageBase64.isEmpty
-                ? const Center(child: CircularProgressIndicator())
-                : Image.memory(
-                    base64.decode(imageBase64),
+            child: StreamBuilder<String>(
+              stream: _streamController.stream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return FadeInImage.memoryNetwork(
+                    placeholder: kTransparentImage,
+                    image: 'data:image/jpeg;base64,${snapshot.data}',
                     fit: BoxFit.cover,
-                  ),
+                  );
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
           ),
         ],
       ),
@@ -108,6 +120,7 @@ class _ControlButtonsState extends State<ControlButtons> {
   bool _isMovingBackward = false;
   bool _isTurningLeft = false;
   bool _isTurningRight = false;
+  double _speed = 1;
 
   @override
   void initState() {
@@ -128,6 +141,7 @@ class _ControlButtonsState extends State<ControlButtons> {
       'move_backward': _isMovingBackward.toString(),
       'turn_left': _isTurningLeft.toString(),
       'turn_right': _isTurningRight.toString(),
+      'speed': _speed.toString(),
     };
     widget.webSocket.send(Message("control", jsonEncode(message)));
   }
@@ -166,6 +180,7 @@ class _ControlButtonsState extends State<ControlButtons> {
       _isMovingBackward = false;
       _isTurningLeft = false;
       _isTurningRight = false;
+      _speed = 1;
     });
     _sendControlMessage();
   }
@@ -186,6 +201,32 @@ class _ControlButtonsState extends State<ControlButtons> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 40, right: 40),
+          child: SliderTheme(
+            data: const SliderThemeData(
+              valueIndicatorTextStyle: TextStyle(color: Colors.white),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Vitesse: $_speed", style: TextStyle(fontSize: 18.0)),
+                Slider(
+                  value: _speed,
+                  min: 1.0,
+                  max: 3.0,
+                  divisions: 2,
+                  // label: _speed.round().toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      _speed = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -222,7 +263,7 @@ class _ControlButtonsState extends State<ControlButtons> {
             ),
           ],
         ),
-        const SizedBox(height: 50),
+        const SizedBox(height: 30),
         ElevatedButton(
           onPressed: _stop,
           child: const Text('Arrêter'),

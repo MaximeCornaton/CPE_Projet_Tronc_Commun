@@ -110,7 +110,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
   String wbVideo = "ws://192.168.137.107:8889";
   String wbMessage = "ws://192.168.137.107:8888";
-  String wbMap = "ws://192.168.243.212:8887";
+  String wbMap = "ws://192.168.137.107:8887";
 
   void updateString(String type, String value) {
     setState(() {

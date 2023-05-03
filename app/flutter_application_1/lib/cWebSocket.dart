@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -25,7 +24,7 @@ class Message {
 }
 
 class WebSocket {
-  late Uri url;
+  Uri url = Uri.parse('ws://');
   bool isConnected = false;
 
   late WebSocketChannel channel;
@@ -40,11 +39,13 @@ class WebSocket {
 
   void connect() {
     try {
-      channel = WebSocketChannel.connect(url);
-      channel.stream.listen((message) {
-        onReceive(message);
-      });
-      isConnected = true;
+      if (url != null && url != Uri.parse('ws://')) {
+        channel = WebSocketChannel.connect(url);
+        channel.stream.listen((message) {
+          onReceive(message);
+        });
+        isConnected = true;
+      }
     } catch (e) {
       print('WebSocket connection failed: $e');
       isConnected = false;

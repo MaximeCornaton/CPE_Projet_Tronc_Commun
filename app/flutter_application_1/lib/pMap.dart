@@ -17,7 +17,7 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    widget.webSocket.connect();
+    widget.webSocket.connect_funct(onDataREceived);
   }
 
   @override

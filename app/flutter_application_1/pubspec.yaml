@@ -47,6 +47,7 @@ dependencies:
   flutter_webrtc: ^0.9.24
   web_socket_channel: ^2.3.0
   flutter_ffmpeg: ^0.4.2
+  transparent_image: ^2.0.1
 
 dev_dependencies:
   flutter_test:

@@ -10,10 +10,10 @@ class ButtonWidget extends StatefulWidget {
       : super(key: key);
 
   @override
-  _ButtonWidgetState createState() => _ButtonWidgetState();
+  ButtonWidgetState createState() => ButtonWidgetState();
 }
 
-class _ButtonWidgetState extends State<ButtonWidget> {
+class ButtonWidgetState extends State<ButtonWidget> {
   bool _switchValue = false;
 
   @override

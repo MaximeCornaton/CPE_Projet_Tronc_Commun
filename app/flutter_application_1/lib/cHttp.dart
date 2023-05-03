@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -40,7 +41,7 @@ Future<Album> fetchAlbum(String param) async {
   } catch (e) {
     // Handle the exception here, e.g. log it or display an error message to the user.
     print('An error occurred while fetching the data: $e');
-    return Album(id: 0, title: 'error', body: 'error');
+    return const Album(id: 0, title: 'error', body: 'error');
   }
 }
 
@@ -63,7 +64,9 @@ void createAlbum(String title, String body_) async {
       throw Exception('Failed to create album.');
     }
   } catch (e) {
-    print('An error occurred while creating the album: $e');
+    if (kDebugMode) {
+      print('An error occurred while creating the album: $e');
+    }
     // You can display an error message to the user here
   }
 }
