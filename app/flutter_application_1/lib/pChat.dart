@@ -14,7 +14,8 @@ class ChatPage extends StatefulWidget {
 
 class ChatPageState extends State<ChatPage> {
   final TextEditingController _textController = TextEditingController();
-  final List<Map<String, String>> _messages = [];
+  final List<String> _messages = [];
+  final List<String> _reponses = [];
 
   bool _isHovered = false;
   late bool _showAnswers;
@@ -23,12 +24,18 @@ class ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
     _showAnswers = widget.showAnswers;
-    widget.webSocket.connect();
+    widget.webSocket.connect_funct(onDataREceived);
+  }
+
+  void onDataREceived(String message) {
+    setState(() {
+      _reponses.add(message);
+    });
   }
 
   @override
   void dispose() {
-    widget.webSocket.close();
+    //widget.webSocket.close();
     super.dispose();
   }
 
@@ -52,11 +59,11 @@ class ChatPageState extends State<ChatPage> {
                   _isHovered = value;
                 });
               },
-              onTap: () async {
+              onTap: () {
                 final message = _textController.text;
-                final response = await _sendChatMessage(message);
+                _sendChatMessage(message);
                 setState(() {
-                  _messages.add({'message': message, 'response': response});
+                  _messages.add(message);
                 });
                 _textController.clear();
               },
@@ -113,9 +120,10 @@ class ChatPageState extends State<ChatPage> {
         itemCount: _messages.length,
         itemBuilder: (BuildContext context, int index) {
           final message = _messages[index];
+          final response = index < _reponses.length ? _reponses[index] : "";
           return ChatMessage(
-            message: message['message']!,
-            response: message['response']!,
+            message: message,
+            answer: response,
             showResponses: _showAnswers,
           );
         },
@@ -141,23 +149,21 @@ class ChatPageState extends State<ChatPage> {
     ));
   }
 
-  Future<String> _sendChatMessage(String message) async {
+  void _sendChatMessage(String message) {
     // logique pour envoyer le message
-
     widget.webSocket.send(Message("message", message));
-    return widget.webSocket.getValue();
   }
 }
 
 class ChatMessage extends StatefulWidget {
   final String message;
-  final String response;
+  final String answer;
   final bool showResponses;
 
   const ChatMessage({
     Key? key,
     required this.message,
-    required this.response,
+    required this.answer,
     required this.showResponses,
   }) : super(key: key);
 
@@ -169,7 +175,8 @@ class ChatMessageState extends State<ChatMessage> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment:
+          CrossAxisAlignment.end, // Aligner les éléments à droite
       children: [
         Container(
           decoration: BoxDecoration(
@@ -177,8 +184,8 @@ class ChatMessageState extends State<ChatMessage> {
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(5.0),
               topRight: Radius.circular(5.0),
-              bottomLeft: Radius.zero,
-              bottomRight: Radius.circular(5.0),
+              bottomLeft: Radius.circular(5.0),
+              bottomRight: Radius.zero, // Changer le coin arrondi
             ),
           ),
           padding: const EdgeInsets.all(10),
@@ -188,21 +195,20 @@ class ChatMessageState extends State<ChatMessage> {
             style: const TextStyle(fontSize: 16, color: Colors.black),
           ),
         ),
-        if (widget
-            .showResponses) // afficher le message de réponse si showResponses est true
+        if (widget.answer != "" && widget.showResponses)
           Container(
             decoration: const BoxDecoration(
               color: Colors.orange,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.zero,
-                topRight: Radius.circular(5.0),
+                topLeft: Radius.circular(5.0),
+                topRight: Radius.zero, // Changer le coin arrondi
                 bottomLeft: Radius.circular(5.0),
                 bottomRight: Radius.circular(5.0),
               ),
             ),
             padding: const EdgeInsets.all(10),
             child: Text(
-              widget.response,
+              widget.answer,
               style: const TextStyle(
                 fontSize: 12,
                 color: Colors.white,

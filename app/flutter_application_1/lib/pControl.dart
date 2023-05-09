@@ -56,8 +56,8 @@ class VideoWidgetState extends State<VideoWidget> {
 
   @override
   void dispose() {
-    _streamController.close();
-    widget.webSocket.close();
+    //_streamController.close();
+    //widget.webSocket.close();
     super.dispose();
   }
 
@@ -210,7 +210,8 @@ class _ControlButtonsState extends State<ControlButtons> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Vitesse: $_speed", style: TextStyle(fontSize: 18.0)),
+                Text("Vitesse: $_speed",
+                    style: const TextStyle(fontSize: 18.0)),
                 Slider(
                   value: _speed,
                   min: 1.0,
@@ -221,6 +222,7 @@ class _ControlButtonsState extends State<ControlButtons> {
                     setState(() {
                       _speed = value;
                     });
+                    _sendControlMessage();
                   },
                 ),
               ],

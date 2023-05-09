@@ -103,8 +103,8 @@ class WebSocket {
     onDataREceived(imageBase64);
   }
 
-  void onMessageReceive(data) {
-    value = data;
+  void onMessageReceive(String message) {
+    onDataREceived(message);
   }
 
   String getValue() {

@@ -12,23 +12,26 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  String imageBase64 = "";
+  List<double> _xCoordinates = [];
+  List<double> _yCoordinates = [];
 
   @override
   void initState() {
     super.initState();
-    widget.webSocket.connect_funct(onDataREceived);
+    widget.webSocket.connect_funct(onDataReceived);
   }
 
   @override
   void dispose() {
-    widget.webSocket.close();
+    //widget.webSocket.close();
     super.dispose();
   }
 
-  void onDataREceived(String imageBase64) {
+  void onDataReceived(String data) {
+    Map<String, dynamic> decodedData = json.decode(data);
     setState(() {
-      this.imageBase64 = imageBase64;
+      _xCoordinates = List<double>.from(decodedData['xCoordinates']);
+      _yCoordinates = List<double>.from(decodedData['yCoordinates']);
     });
   }
 
@@ -53,15 +56,39 @@ class _MapPageState extends State<MapPage> {
             ),
             width: 640,
             height: 480,
-            child: imageBase64.isEmpty
-                ? const Center(child: CircularProgressIndicator())
-                : Image.memory(
-                    base64.decode(imageBase64),
-                    fit: BoxFit.cover,
-                  ),
+            child: CustomPaint(
+              painter: MapPainter(_xCoordinates, _yCoordinates),
+            ),
           ),
         ],
       ),
     );
   }
+}
+
+class MapPainter extends CustomPainter {
+  final List<double> xCoordinates;
+  final List<double> yCoordinates;
+
+  MapPainter(this.xCoordinates, this.yCoordinates);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.red
+      ..strokeWidth = 5;
+
+    for (int i = 0; i < xCoordinates.length; i++) {
+      canvas.drawCircle(
+        Offset(xCoordinates[i], yCoordinates[i]),
+        10,
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(MapPainter oldDelegate) =>
+      oldDelegate.xCoordinates != xCoordinates ||
+      oldDelegate.yCoordinates != yCoordinates;
 }
