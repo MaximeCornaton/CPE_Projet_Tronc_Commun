@@ -23,7 +23,7 @@ class _MapPageState extends State<MapPage> {
 
   @override
   void dispose() {
-    //widget.webSocket.close();
+    widget.webSocket.close();
     super.dispose();
   }
 

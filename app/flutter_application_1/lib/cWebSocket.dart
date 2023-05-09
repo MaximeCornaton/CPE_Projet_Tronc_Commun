@@ -99,8 +99,9 @@ class WebSocket {
     onDataREceived(imageBase64);
   }
 
-  void onMapReceive(String imageBase64) {
-    onDataREceived(imageBase64);
+  void onMapReceive(String data) {
+    print(data);
+    onDataREceived(data);
   }
 
   void onMessageReceive(String message) {

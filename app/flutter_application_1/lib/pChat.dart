@@ -35,7 +35,7 @@ class ChatPageState extends State<ChatPage> {
 
   @override
   void dispose() {
-    //widget.webSocket.close();
+    widget.webSocket.close();
     super.dispose();
   }
 

@@ -56,8 +56,8 @@ class VideoWidgetState extends State<VideoWidget> {
 
   @override
   void dispose() {
-    //_streamController.close();
-    //widget.webSocket.close();
+    _streamController.close();
+    widget.webSocket.close();
     super.dispose();
   }
 
