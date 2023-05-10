@@ -5,7 +5,7 @@ class ChatPage extends StatefulWidget {
   final bool showAnswers;
   final WebSocket webSocket;
 
-  const ChatPage({this.showAnswers = false, super.key, required this.webSocket})
+  const ChatPage({this.showAnswers = true, super.key, required this.webSocket})
       : super();
 
   @override

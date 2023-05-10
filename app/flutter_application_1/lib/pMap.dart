@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/cWebSocket.dart';
@@ -38,7 +39,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 40, left: 20, right: 20),
+      margin: const EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 40),
       child: Stack(
         children: [
           Container(
@@ -54,8 +55,8 @@ class _MapPageState extends State<MapPage> {
                 Radius.circular(8),
               ),
             ),
-            width: 640,
-            height: 480,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
             child: CustomPaint(
               painter: MapPainter(_xCoordinates, _yCoordinates),
             ),
@@ -74,14 +75,19 @@ class MapPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    print("Canvas size: $size");
     final paint = Paint()
-      ..color = Colors.red
+      ..color = Colors.orange
       ..strokeWidth = 5;
+
+    canvas.translate(size.width / 2, size.height * 0.75);
+    canvas.rotate(math.pi);
 
     for (int i = 0; i < xCoordinates.length; i++) {
       canvas.drawCircle(
-        Offset(xCoordinates[i], yCoordinates[i]),
-        10,
+        Offset(xCoordinates[i] / 7500 * size.width,
+            yCoordinates[i] / 7500 * size.height),
+        3,
         paint,
       );
     }

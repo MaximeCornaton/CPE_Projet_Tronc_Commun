@@ -11,7 +11,7 @@ class SettingsPage extends StatefulWidget {
 
   final Function updateString;
 
-  SettingsPage(
+  const SettingsPage(
       {super.key,
       required this.updateString,
       required this.wbVideo,
@@ -75,21 +75,24 @@ class SettingsPageState extends State<SettingsPage> {
             child: Column(
               children: [
                 TextField(
-                  decoration: InputDecoration(labelText: 'WebSocket Video'),
+                  decoration:
+                      const InputDecoration(labelText: 'WebSocket Video'),
                   controller: _wbVideoController,
                   onChanged: (value) {
                     widget.updateString('video', value);
                   },
                 ),
                 TextField(
-                  decoration: InputDecoration(labelText: 'WebSocket Message'),
+                  decoration: const InputDecoration(
+                      labelText: 'WebSocket Controles/Messages'),
                   controller: _wbMessageController,
                   onChanged: (value) {
                     widget.updateString('message', value);
                   },
                 ),
                 TextField(
-                  decoration: InputDecoration(labelText: 'WebSocket Map'),
+                  decoration:
+                      const InputDecoration(labelText: 'WebSocket Carte'),
                   controller: _wbMapController,
                   onChanged: (value) {
                     widget.updateString('map', value);

@@ -100,7 +100,6 @@ class WebSocket {
   }
 
   void onMapReceive(String data) {
-    print(data);
     onDataREceived(data);
   }
 

@@ -108,9 +108,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   late WebSocket webSocketMessage;
   late WebSocket webSocketMap;
 
-  String wbVideo = "ws://192.168.137.107:8889";
-  String wbMessage = "ws://192.168.137.107:8888";
-  String wbMap = "ws://192.168.137.107:8887";
+  String wbVideo = "ws://192.168.137.200:8889";
+  String wbMessage = "ws://192.168.137.200:8888";
+  String wbMap = "ws://192.168.137.200:8887";
 
   void updateString(String type, String value) {
     setState(() {
@@ -168,7 +168,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     "Home",
     "Controles et vidéo",
     "Cartographie",
-    "Envoi de message",
+    "Parle au robot",
     "Paramètres"
   ];
 

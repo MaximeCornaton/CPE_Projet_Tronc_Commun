@@ -31,6 +31,13 @@ class ControlPageState extends State<ControlPage> {
       ],
     );
   }
+
+  @override
+  void dispose() {
+    widget.webSocketVideo.close();
+    widget.webSocketControl.close();
+    super.dispose();
+  }
 }
 
 class VideoWidget extends StatefulWidget {
