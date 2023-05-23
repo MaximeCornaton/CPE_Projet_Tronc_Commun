@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/cWebSocket.dart';
@@ -205,11 +206,12 @@ class _ControlButtonsState extends State<ControlButtons> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return SingleChildScrollView(
+        child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 40, right: 40),
+          padding: const EdgeInsets.only(left: 40, right: 40, top: 20),
           child: SliderTheme(
             data: const SliderThemeData(
               valueIndicatorTextStyle: TextStyle(color: Colors.white),
@@ -273,11 +275,97 @@ class _ControlButtonsState extends State<ControlButtons> {
           ],
         ),
         const SizedBox(height: 30),
+        Joystick(
+          onJoystickChanged: (double normalizedX, double normalizedY) {
+            // Logique pour envoyer les mouvements de la caméra
+            final message = {
+              'look_top': normalizedY < 0 ? (-normalizedY).toString() : '0',
+              'look_bottom': normalizedY > 0 ? (normalizedY).toString() : '0',
+              'look_left': normalizedX < 0 ? (-normalizedX).toString() : '0',
+              'look_right': normalizedX > 0 ? normalizedX.toString() : '0',
+            };
+            widget.webSocket.send(Message("control_cam", jsonEncode(message)));
+          },
+        ),
+        const SizedBox(height: 30),
         ElevatedButton(
           onPressed: _stop,
           child: const Text('Arrêter'),
         ),
       ],
+    ));
+  }
+}
+
+class Joystick extends StatefulWidget {
+  final Function(double, double) onJoystickChanged;
+
+  const Joystick({Key? key, required this.onJoystickChanged}) : super(key: key);
+
+  @override
+  _JoystickState createState() => _JoystickState();
+}
+
+class _JoystickState extends State<Joystick> {
+  Offset _joystickPosition = Offset.zero;
+  static const double _maxJoystickDistance = 25.0;
+  final double screenWidth =
+      window.physicalSize.width / window.devicePixelRatio;
+
+  void _updateJoystickPosition(Offset position) {
+    const double radius = _maxJoystickDistance;
+    final double constrainedX = position.dx.clamp(-radius, radius);
+    final double constrainedY = position.dy.clamp(-radius, radius);
+    final Offset newPosition = Offset(constrainedX, constrainedY);
+
+    setState(() {
+      _joystickPosition = newPosition;
+    });
+
+    final double normalizedX = newPosition.dx / radius;
+    final double normalizedY = newPosition.dy / radius;
+    widget.onJoystickChanged(normalizedX, normalizedY);
+  }
+
+  void _onPanStart(DragStartDetails details) {
+    _updateJoystickPosition(details.localPosition -
+        Offset(screenWidth / 2, _maxJoystickDistance / 2));
+  }
+
+  void _onPanUpdate(DragUpdateDetails details) {
+    _updateJoystickPosition(details.localPosition -
+        Offset(screenWidth / 2, _maxJoystickDistance / 2));
+  }
+
+  void _onPanEnd(DragEndDetails details) {
+    _updateJoystickPosition(Offset.zero);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onPanStart: _onPanStart,
+      onPanUpdate: _onPanUpdate,
+      onPanEnd: _onPanEnd,
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.grey[300],
+        ),
+        child: Center(
+          child: Transform.translate(
+            offset: _joystickPosition,
+            child: Container(
+              width: 50.0,
+              height: 50.0,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.orange,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

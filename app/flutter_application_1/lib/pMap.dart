@@ -43,24 +43,25 @@ class _MapPageState extends State<MapPage> {
       child: Stack(
         children: [
           Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Theme.of(context)
-                        .bottomNavigationBarTheme
-                        .selectedItemColor ??
-                    Colors.black,
-                width: 2,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Theme.of(context)
+                          .bottomNavigationBarTheme
+                          .selectedItemColor ??
+                      Colors.black,
+                  width: 2,
+                ),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(8),
+                ),
               ),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(8),
-              ),
-            ),
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: CustomPaint(
-              painter: MapPainter(_xCoordinates, _yCoordinates),
-            ),
-          ),
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: ClipRect(
+                child: CustomPaint(
+                  painter: MapPainter(_xCoordinates, _yCoordinates),
+                ),
+              )),
         ],
       ),
     );
@@ -75,18 +76,53 @@ class MapPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    print("Canvas size: $size");
+    // Ajout du point orange
+    canvas.drawCircle(
+      Offset(size.width / 2, size.height),
+      10,
+      Paint()..color = Colors.orange,
+    );
+
+// Dessin du radar sur un demi-cercle
+    final numRings = 6; // Nombre d'anneaux du radar
+    final maxDimension = size.width > size.height
+        ? size.width
+        : size.height; // Rayon maximal du radar
+
+    final startAngle = -math.pi; // Angle de départ pour le demi-cercle
+    final endAngle = 0; // Angle de fin pour le demi-cercle
+
+    for (int i = 0; i < numRings; i++) {
+      final radius = maxDimension * (i + 1) / numRings;
+      final opacity = 1 *
+          (numRings - i) /
+          numRings; // Opacité décroissante avec la distance
+
+      canvas.drawArc(
+        Rect.fromCircle(
+            center: Offset(size.width / 2, size.height), radius: radius),
+        startAngle,
+        endAngle - startAngle,
+        false,
+        Paint()
+          ..color = Colors.orange.withOpacity(opacity)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2,
+      );
+    }
+
+    //print("Canvas size: $size");
     final paint = Paint()
       ..color = Colors.orange
       ..strokeWidth = 5;
 
-    canvas.translate(size.width / 2, size.height * 0.75);
+    canvas.translate(size.width / 2, size.height);
     canvas.rotate(math.pi);
 
     for (int i = 0; i < xCoordinates.length; i++) {
       canvas.drawCircle(
-        Offset(xCoordinates[i] / 7500 * size.width,
-            yCoordinates[i] / 7500 * size.height),
+        Offset(xCoordinates[i] / 6000 * size.width,
+            yCoordinates[i] / 6000 * size.height),
         3,
         paint,
       );
