@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/cWebSocket.dart';
+import 'package:ptc_groupe_a1/cWebSocket.dart';
 
 class ChatPage extends StatefulWidget {
   final bool showAnswers;

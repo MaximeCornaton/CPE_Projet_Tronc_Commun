@@ -88,6 +88,9 @@ class WebSocket {
       case 'message':
         onMessageReceive(messageObject.value);
         break;
+      case 'face':
+        onVisageReceive(messageObject.value);
+        break;
       default:
         break;
     }
@@ -105,6 +108,10 @@ class WebSocket {
 
   void onMessageReceive(String message) {
     onDataREceived(message);
+  }
+
+  void onVisageReceive(String visage) {
+    onDataREceived(visage);
   }
 
   String getValue() {

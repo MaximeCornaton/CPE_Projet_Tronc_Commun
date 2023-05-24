@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
+import 'package:universal_platform/universal_platform.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/cWebSocket.dart';
+import 'package:ptc_groupe_a1/cWebSocket.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class ControlPage extends StatefulWidget {
@@ -98,11 +99,20 @@ class VideoWidgetState extends State<VideoWidget> {
               stream: _streamController.stream,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return FadeInImage.memoryNetwork(
-                    placeholder: kTransparentImage,
-                    image: 'data:image/jpeg;base64,${snapshot.data}',
-                    fit: BoxFit.cover,
-                  );
+                  if (UniversalPlatform.isAndroid || UniversalPlatform.isIOS) {
+                    // Plateforme Android ou iOS
+                    return Image.memory(
+                      base64Decode(snapshot.data as String),
+                      fit: BoxFit.cover,
+                    );
+                  } else {
+                    // Autres plateformes (Web, etc.)
+                    return FadeInImage.memoryNetwork(
+                      placeholder: kTransparentImage,
+                      image: 'data:image/jpeg;base64,${snapshot.data}',
+                      fit: BoxFit.cover,
+                    );
+                  }
                 } else {
                   return const Center(child: CircularProgressIndicator());
                 }
@@ -128,12 +138,13 @@ class _ControlButtonsState extends State<ControlButtons> {
   bool _isMovingBackward = false;
   bool _isTurningLeft = false;
   bool _isTurningRight = false;
+  String _faces = "";
   double _speed = 1;
 
   @override
   void initState() {
     super.initState();
-    widget.webSocket.connect();
+    widget.webSocket.connect_funct(onDataReceived);
   }
 
   @override
@@ -152,6 +163,14 @@ class _ControlButtonsState extends State<ControlButtons> {
       'speed': _speed.toString(),
     };
     widget.webSocket.send(Message("control", jsonEncode(message)));
+  }
+
+  Future<void> _sendFacialRecognitionMessage() async {
+    // logique pour envoyer le message
+    final message = {
+      'facial_recognition': 'true',
+    };
+    widget.webSocket.send(Message("control_fac", jsonEncode(message)));
   }
 
   void _moveForward(bool value) {
@@ -180,6 +199,16 @@ class _ControlButtonsState extends State<ControlButtons> {
       _isTurningRight = value;
     });
     _sendControlMessage();
+  }
+
+  void onDataReceived(String data) {
+    setState(() {
+      _faces = data;
+    });
+  }
+
+  void _facialRecognition() {
+    _sendFacialRecognitionMessage();
   }
 
   void _stop() {
@@ -279,19 +308,27 @@ class _ControlButtonsState extends State<ControlButtons> {
           onJoystickChanged: (double normalizedX, double normalizedY) {
             // Logique pour envoyer les mouvements de la caméra
             final message = {
-              'look_top': normalizedY < 0 ? (-normalizedY).toString() : '0',
-              'look_bottom': normalizedY > 0 ? (normalizedY).toString() : '0',
-              'look_left': normalizedX < 0 ? (-normalizedX).toString() : '0',
-              'look_right': normalizedX > 0 ? normalizedX.toString() : '0',
+              'lookX': normalizedX.toString(),
+              'lookY': normalizedY.toString(),
             };
             widget.webSocket.send(Message("control_cam", jsonEncode(message)));
           },
+        ),
+        const SizedBox(height: 30),
+        Text(
+          'Visages détectés: $_faces',
+        ),
+        const SizedBox(height: 10),
+        ElevatedButton(
+          onPressed: _facialRecognition,
+          child: const Icon(Icons.face_2_rounded),
         ),
         const SizedBox(height: 30),
         ElevatedButton(
           onPressed: _stop,
           child: const Text('Arrêter'),
         ),
+        const SizedBox(height: 30),
       ],
     ));
   }

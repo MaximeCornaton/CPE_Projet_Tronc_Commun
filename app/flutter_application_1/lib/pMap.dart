@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/cWebSocket.dart';
+import 'package:ptc_groupe_a1/cWebSocket.dart';
 
 class MapPage extends StatefulWidget {
   final WebSocket webSocket;
@@ -84,13 +84,11 @@ class MapPainter extends CustomPainter {
     );
 
 // Dessin du radar sur un demi-cercle
-    final numRings = 6; // Nombre d'anneaux du radar
-    final maxDimension = size.width > size.height
-        ? size.width
-        : size.height; // Rayon maximal du radar
+    const numRings = 6; // Nombre d'anneaux du radar
+    final maxDimension = size.height; // Rayon maximal du radar
 
-    final startAngle = -math.pi; // Angle de départ pour le demi-cercle
-    final endAngle = 0; // Angle de fin pour le demi-cercle
+    const startAngle = -math.pi; // Angle de départ pour le demi-cercle
+    const endAngle = 0; // Angle de fin pour le demi-cercle
 
     for (int i = 0; i < numRings; i++) {
       final radius = maxDimension * (i + 1) / numRings;
@@ -109,6 +107,20 @@ class MapPainter extends CustomPainter {
           ..style = PaintingStyle.stroke
           ..strokeWidth = 2,
       );
+
+      // Ajout du numéro de l'anneau
+      final textPainter = TextPainter(
+        text: TextSpan(
+          text: "${i + 1} m", // Numéro de l'anneau
+          style: const TextStyle(color: Colors.orange, fontSize: 14),
+        ),
+        textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr,
+      );
+      textPainter.layout();
+      final textX = size.width / 2 - textPainter.width / 2;
+      final textY = size.height - radius - textPainter.height / 2;
+      textPainter.paint(canvas, Offset(textX, textY - 10));
     }
 
     //print("Canvas size: $size");

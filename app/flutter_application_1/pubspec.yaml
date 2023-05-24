@@ -1,4 +1,4 @@
-name: flutter_application_1
+name: ptc_groupe_a1
 description: Projet Tronc Commun - Group A1.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -40,14 +40,13 @@ dependencies:
   arrow_pad: ^0.1.5 # Note: use latest version
   adaptive_theme: ^3.0.0
   http: ^0.13.5
-  camera: ^0.10.3+2
+
   video_player: ^2.6.0
-  flutter_vlc_player: ^7.2.0
+
   chewie: ^1.4.0
-  flutter_webrtc: ^0.9.24
   web_socket_channel: ^2.3.0
-  flutter_ffmpeg: ^0.4.2
   transparent_image: ^2.0.1
+  universal_platform: ^1.0.0+1
 
 dev_dependencies:
   flutter_test:
